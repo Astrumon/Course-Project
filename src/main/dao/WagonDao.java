@@ -7,8 +7,11 @@ import java.util.List;
 public interface WagonDao {
     String SQL_FIND_ALL = "SELECT * FROM " + Wagon.TABLE_NAME;
     String SQL_FIND_BY_ID = SQL_FIND_ALL + " WHERE " + Wagon.ID_COLUMN + "= ?";
-    String SQL_INSERT = "INSERT INTO " + Wagon.TABLE_NAME + "("+ Wagon.ID_COLUMN + "," + Wagon.SEATING_CAPACITY + ") VALUES(?,?)";
-    String SQL_UPDATE = "UPDATE " + Wagon.TABLE_NAME + " SET " + Wagon.SEATING_CAPACITY + " = ? WHERE " + Wagon.ID_COLUMN + " = ?";
+    String SQL_INSERT = "INSERT INTO " + Wagon.TABLE_NAME + "("+ Wagon.ID_COLUMN + "," + Wagon.SEATING_CAPACITY + ","
+            + Wagon.ID_TRAIN + "," + Wagon.ID_WAREHOUSE + "," + Wagon.POSITION_TRAIN + ") VALUES(?,?,?,?,?)";
+    String SQL_UPDATE = "UPDATE " + Wagon.TABLE_NAME + " SET " + Wagon.SEATING_CAPACITY + " = ?, "
+            + Wagon.ID_TRAIN + " = ?, " + Wagon.ID_WAREHOUSE + " = ?, "  + Wagon.POSITION_TRAIN + " = ? "
+            +" WHERE " + Wagon.ID_COLUMN + " = ?";
     String SQL_DELETE = "DELETE FROM " + Wagon.TABLE_NAME + " WHERE " + Wagon.ID_COLUMN + " = ?";
 
     List<Wagon> findAll();

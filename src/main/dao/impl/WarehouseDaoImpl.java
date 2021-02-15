@@ -30,6 +30,7 @@ public class WarehouseDaoImpl implements WarehouseDao {
                 Warehouse warehouse = new Warehouse();
                 warehouse.setId(rs.getLong(Wagon.ID_COLUMN));
                 warehouse.setIdWagon(rs.getLong(Warehouse.WAGON_COLUMN));
+                warehouse.setName(rs.getString(Warehouse.NAME_WAREHOUSE));
                 warehouses.add(warehouse);
             }
         } catch (SQLException exc) {
@@ -80,7 +81,8 @@ public class WarehouseDaoImpl implements WarehouseDao {
             connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE);
             preparedStatement.setLong(1, warehouse.getIdWagon());
-            preparedStatement.setLong(2, warehouse.getId());
+            preparedStatement.setString(2, warehouse.getName());
+            preparedStatement.setLong(3, warehouse.getId());
             preparedStatement.execute();
 
         } catch (SQLException exc) {
@@ -103,8 +105,6 @@ public class WarehouseDaoImpl implements WarehouseDao {
             preparedStatement.setLong(1, warehouse.getId());
             preparedStatement.execute();
 
-
-
         } catch (SQLException exc) {
             System.out.println(exc);
         } finally {
@@ -124,7 +124,8 @@ public class WarehouseDaoImpl implements WarehouseDao {
             connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setLong(1, warehouse.getId());
-            preparedStatement.setLong(2, warehouse.getIdWagon());
+            preparedStatement.setLong(2,  warehouse.getIdWagon());
+            preparedStatement.setString(3, warehouse.getName());
             preparedStatement.execute();
             ResultSet rs = preparedStatement.getGeneratedKeys();
             while (rs.next()) {

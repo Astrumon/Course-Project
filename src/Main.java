@@ -16,23 +16,41 @@ public class Main {
         dataSource.setUrl(PATH_DB);
 
 
-        WarehouseDaoImpl warehouseDao1 = new WarehouseDaoImpl(dataSource);
-        Wagon wagon = new Wagon();
-        wagon.setId(4l);
-        wagon.setSeatingCount(5);
+        Wagon wagon = new Wagon(1l, 5, 1l, 1l, 3);
+        Wagon wagon1 = new Wagon(4l, 15, 2l, 1l, 3);
+        Wagon wagon2 = new Wagon(2l, 25, 3l, 1l, 3);
+
         WagonDaoImpl wagonDao = new WagonDaoImpl(dataSource);
         wagonDao.insert(wagon);
+        wagonDao.insert(wagon1);
+        wagonDao.insert(wagon2);
+
+        //wagonDao.delete(wagon1);
+
         showAllWagons(wagonDao.findAll());
 
         System.out.println();
-        Warehouse warehouse = new Warehouse();
-        warehouse.setId(1l);
-        warehouse.setIdWagon(wagon.getId());
-        //warehouseDao1.insert(warehouse);
+        WarehouseDaoImpl warehouseDao = new WarehouseDaoImpl(dataSource);
+
+        warehouseDao.delete(new Warehouse(1l, 4l, null));
+        Warehouse warehouse = new Warehouse(2l, 1l, "#1");
+        Warehouse warehouse1 = new Warehouse(3l, 2l, "#2");
+        Warehouse warehouse2 = new Warehouse(1l, 3l, "#2");
 
         wagonDao.delete(wagon);
-        showAllWagons(wagonDao.findAll());
-        showAllWarehouse(warehouseDao1.findAll());
+        warehouseDao.delete(warehouse);
+        warehouseDao.delete(warehouse1);
+
+        warehouseDao.insert(warehouse);
+        warehouseDao.insert(warehouse1);
+        warehouseDao.insert(warehouse2);
+
+        showAllWarehouse(warehouseDao.findAll());
+
+
+
+
+
     }
 
     public static void showWagon(Wagon wagon) {
