@@ -5,17 +5,8 @@ import java.util.List;
 
 public class Train {
     public static final String TABLE_NAME = "train";
-
-    public static final String FIRST_WAGON_COLUMN = "firstWagon_id";
-    public static final String SECOND_WAGON_COLUMN = "secondWagon_id";
-    public static final String THIRD_WAGON_COLUMN = "thirdWagon_id";
-    public static final String FOURTH_WAGON_COLUMN = "fourthWagon_id";
-    public static final String FIFTH_WAGON_COLUMN = "fifthWagon_id";
-    public static final String SIXTH_WAGON_COLUMN = "sixthWagon_id";
-    public static final String SEVENTH_WAGON_COLUMN = "seventhWagon_id";
-    public static final String EIGHTH_WAGON_COLUMN = "eighthWagon_id";
-    public static final String NINTH_WAGON_COLUMN = "ninthWagon_id";
-    public static final String TENTH_WAGON_COLUMN = "tenthWagon_id";
+    public static final String NAME_COLUMN = "name";
+    public static final String COUNT_WAGONS_COLUMN = "count_wagons";
 
     public static final String ID_COLUMN = "id";
 

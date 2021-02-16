@@ -28,9 +28,9 @@ public class WarehouseDaoImpl implements WarehouseDao {
 
             while (rs.next()) {
                 Warehouse warehouse = new Warehouse();
-                warehouse.setId(rs.getLong(Wagon.ID_COLUMN));
+                warehouse.setId(rs.getLong(Wagon.ID_COLUMN_COLUMN));
                 warehouse.setIdWagon(rs.getLong(Warehouse.WAGON_COLUMN));
-                warehouse.setName(rs.getString(Warehouse.NAME_WAREHOUSE));
+                warehouse.setName(rs.getString(Warehouse.NAME_WAREHOUSE_COLUMN));
                 warehouses.add(warehouse);
             }
         } catch (SQLException exc) {

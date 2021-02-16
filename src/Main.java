@@ -16,9 +16,9 @@ public class Main {
         dataSource.setUrl(PATH_DB);
 
 
-        Wagon wagon = new Wagon(1l, 5, 1l, 1l, 3);
-        Wagon wagon1 = new Wagon(4l, 15, 2l, 1l, 3);
-        Wagon wagon2 = new Wagon(2l, 25, 3l, 1l, 3);
+        Wagon wagon = new Wagon(1l, 5, 1l, 1l, 3, 1);
+        Wagon wagon1 = new Wagon(4l, 15, 2l, 1l, 3, 2);
+        Wagon wagon2 = new Wagon(2l, 25, 3l, 1l, 3, 3);
 
         WagonDaoImpl wagonDao = new WagonDaoImpl(dataSource);
         wagonDao.insert(wagon);
@@ -46,6 +46,11 @@ public class Main {
         warehouseDao.insert(warehouse2);
 
         showAllWarehouse(warehouseDao.findAll());
+
+        wagonDao.delete(wagon);
+        wagonDao.delete(wagon1);
+        wagonDao.delete(wagon2);
+
 
 
 

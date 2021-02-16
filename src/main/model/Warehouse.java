@@ -7,7 +7,7 @@ public class Warehouse {
     public static final String TABLE_NAME = "warehouse";
     public static final String ID_COLUMN = "id";
     public static final String WAGON_COLUMN = "wagon_id";
-    public static final String NAME_WAREHOUSE = "name";
+    public static final String NAME_WAREHOUSE_COLUMN = "name";
 
     private Long id, idWagon;
     private String name;

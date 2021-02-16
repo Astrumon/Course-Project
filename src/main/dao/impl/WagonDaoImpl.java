@@ -3,7 +3,6 @@ package main.dao.impl;
 import main.DataSource;
 import main.dao.WagonDao;
 import main.model.Wagon;
-import main.model.Warehouse;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -28,11 +27,12 @@ public class WagonDaoImpl implements WagonDao {
 
             while (rs.next()) {
                 Wagon wagon = new Wagon();
-                wagon.setId(rs.getLong(Wagon.ID_COLUMN));
-                wagon.setSeatingCount(rs.getInt(Wagon.SEATING_CAPACITY));
-                wagon.setIdTrain(rs.getLong(Wagon.ID_TRAIN));
-                wagon.setIdWarehouse(rs.getLong(Wagon.ID_WAREHOUSE));
-                wagon.setPosTrain(rs.getInt(Wagon.POSITION_TRAIN));
+                wagon.setId(rs.getLong(Wagon.ID_COLUMN_COLUMN));
+                wagon.setSeatingCount(rs.getInt(Wagon.SEATING_CAPACITY_COLUMN));
+                wagon.setIdTrain(rs.getLong(Wagon.ID_TRAIN_COLUMN));
+                wagon.setIdWarehouse(rs.getLong(Wagon.ID_WAREHOUSE_COLUMN));
+                wagon.setPosTrain(rs.getInt(Wagon.POSITION_TRAIN_COLUMN));
+                wagon.setType(rs.getInt(Wagon.TYPE_COLUMN));
                 wagons.add(wagon);
             }
         } catch (SQLException exc) {
@@ -59,11 +59,12 @@ public class WagonDaoImpl implements WagonDao {
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 wagon = new Wagon();
-                wagon.setId(rs.getLong(Wagon.ID_COLUMN));
-                wagon.setSeatingCount(rs.getInt(Wagon.SEATING_CAPACITY));
-                wagon.setIdTrain(rs.getLong(Wagon.ID_TRAIN));
-                wagon.setIdWarehouse(rs.getLong(Wagon.ID_WAREHOUSE));
-                wagon.setPosTrain(rs.getInt(Wagon.POSITION_TRAIN));
+                wagon.setId(rs.getLong(Wagon.ID_COLUMN_COLUMN));
+                wagon.setSeatingCount(rs.getInt(Wagon.SEATING_CAPACITY_COLUMN));
+                wagon.setIdTrain(rs.getLong(Wagon.ID_TRAIN_COLUMN));
+                wagon.setIdWarehouse(rs.getLong(Wagon.ID_WAREHOUSE_COLUMN));
+                wagon.setPosTrain(rs.getInt(Wagon.POSITION_TRAIN_COLUMN));
+                wagon.setType(rs.getInt(Wagon.TYPE_COLUMN));
             }
         } catch (SQLException exc) {
             System.out.println(exc);
@@ -113,6 +114,7 @@ public class WagonDaoImpl implements WagonDao {
             preparedStatement.setLong(3, wagon.getIdTrain());
             preparedStatement.setLong(4, wagon.getIdWarehouse());
             preparedStatement.setLong(5, wagon.getPosTrain());
+            preparedStatement.setInt(6, wagon.getType());
             preparedStatement.execute();
             ResultSet rs = preparedStatement.getGeneratedKeys();
             while (rs.next()) {
@@ -141,7 +143,8 @@ public class WagonDaoImpl implements WagonDao {
             preparedStatement.setLong(2, wagon.getIdTrain());
             preparedStatement.setLong(3, wagon.getIdWarehouse());
             preparedStatement.setLong(4, wagon.getPosTrain());
-            preparedStatement.setLong(5, wagon.getId());
+            preparedStatement.setInt(5, wagon.getType());
+            preparedStatement.setLong(6, wagon.getId());
             preparedStatement.execute();
 
         } catch (SQLException exc) {
