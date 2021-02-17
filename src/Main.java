@@ -1,14 +1,13 @@
 import main.DataSource;
-import main.dao.TrainDao;
 import main.dao.impl.TrainDaoImpl;
+import main.dao.impl.TrainSetDaoImpl;
 import main.dao.impl.WagonDaoImpl;
 import main.dao.impl.WarehouseDaoImpl;
 import main.model.Train;
+import main.model.TrainSet;
 import main.model.Wagon;
 import main.model.Warehouse;
-import org.w3c.dom.ls.LSOutput;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -55,59 +54,69 @@ public class Main {
         wagonDao.delete(wagon1);
         wagonDao.delete(wagon2);
 
+        TrainSetDaoImpl trainSetDao = new TrainSetDaoImpl(dataSource);
+
+        Train train = new Train();
+        train.setName("train#1");
+        train.setCount_wagon(5);
+
         TrainDaoImpl trainDao = new TrainDaoImpl(dataSource);
+        trainDao.insert(train);
+        showAllTrain(trainDao.findAll());
 
-        Train train  = new Train();
-        train.setId(1l);
-        train.setName("train1");
-        train.setCountWagons(3);
 
-        Train train1  = new Train();
-        train1.setId(2l);
-        train1.setName("train1");
 
-        Train train2  = new Train();
-        train2.setId(3l);
-        train2.setName("train1");
-
-        Train train3  = new Train();
-        train3.setId(4l);
-        train3.setName("train1");
-
-        Train train4  = new Train();
-        train4.setId(5l);
-        train4.setCountWagons(10);
-        train4.setName("train2");
-
-        Train train5  = new Train();
-        train5.setId(6l);
-        train5.setName("train2");
-
-        Train train6  = new Train();
-        train6.setId(7l);
-        train6.setName("train1");
-
-        System.out.println(train1);
-        System.out.println(train.toString());
+//        TrainSet trainSet = new TrainSet();
+//        trainSet.setId(1l);
+//        trainSet.setName("trainSet1");
+//        trainSet.setCountWagons(3);
+//
+//        TrainSet trainSet1 = new TrainSet();
+//        trainSet1.setId(2l);
+//        trainSet1.setName("trainSet1");
+//
+//        TrainSet trainSet2 = new TrainSet();
+//        trainSet2.setId(3l);
+//        trainSet2.setName("trainSet1");
+//
+//        TrainSet trainSet3 = new TrainSet();
+//        trainSet3.setId(4l);
+//        trainSet3.setName("trainSet1");
+//
+//        TrainSet trainSet4 = new TrainSet();
+//        trainSet4.setId(5l);
+//        trainSet4.setCountWagons(10);
+//        trainSet4.setName("trainSet2");
+//
+//        TrainSet trainSet5 = new TrainSet();
+//        trainSet5.setId(6l);
+//        trainSet5.setName("trainSet2");
+//
+//        TrainSet trainSet6 = new TrainSet();
+//        trainSet6.setId(7l);
+//        trainSet6.setName("trainSet1");
+//
+//        System.out.println(trainSet1);
+//        System.out.println(trainSet.toString());
 
 
         System.out.println();
-        trainDao.insert(train6);
-        trainDao.insert(train3);
-        trainDao.insert(train4);
-        trainDao.insert(train5);
-        trainDao.insert(train2);
-        trainDao.insert(train);
-        trainDao.insert(train1);
-//        trainDao.delete(train);
-//        trainDao.delete(train1);
-//        trainDao.delete(train2);
-//        trainDao.delete(train3);
-//        trainDao.delete(train4);
-//        trainDao.delete(train5);
-//        trainDao.delete(train6);
+//        trainDao.insert(trainSet6);
+//        trainDao.insert(trainSet3);
+//        trainDao.insert(trainSet4);
+//        trainDao.insert(trainSet5);
+//        trainDao.insert(trainSet2);
+//        trainDao.insert(trainSet);
+//        trainDao.insert(trainSet1);
+//        trainDao.delete(trainSet);
+//        trainDao.delete(trainSet1);
+//        trainDao.delete(trainSet2);
+//        trainDao.delete(trainSet3);
+//        trainDao.delete(trainSet4);
+//        trainDao.delete(trainSet5);
+//        trainDao.delete(trainSet6);
 
-        showAllTrains(trainDao.findAll());
+       // showAllTrainSet(trainDao.findAll());
 
 
 
@@ -139,11 +148,21 @@ public class Main {
         }
     }
 
+    public static void showTrainSet(TrainSet trainSet) {
+        System.out.println(trainSet.toString());
+    }
+
+    public static void showAllTrainSet(List<TrainSet> trainSets) {
+        for (TrainSet trainSet : trainSets) {
+            System.out.println(trainSet);
+        }
+    }
+
     public static void showTrain(Train train) {
         System.out.println(train.toString());
     }
 
-    public static void showAllTrains(List<Train> trains) {
+    public static void showAllTrain(List<Train> trains) {
         for (Train train : trains) {
             System.out.println(train);
         }
