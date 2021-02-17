@@ -141,10 +141,7 @@ public class TrainSetDaoImpl implements TrainSetDao {
             try {
                 connection = dataSource.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
-
-
-                preparedStatement.setLong(1, trainSet.getId());
-                preparedStatement.setString(2, trainSet.getName());
+                preparedStatement.setString(1, trainSet.getName());
                 preparedStatement.execute();
                 ResultSet rs = preparedStatement.getGeneratedKeys();
                 while (rs.next()) {

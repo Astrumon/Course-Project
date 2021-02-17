@@ -14,8 +14,7 @@ public class Train {
 
     }
 
-    public Train(Long id, String name, int count_wagon) {
-        this.id = id;
+    public Train(String name, int count_wagon) {
         this.name = name;
         this.count_wagon = count_wagon;
     }

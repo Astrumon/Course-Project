@@ -24,8 +24,7 @@ public class Wagon {
 
     }
 
-    public Wagon(Long id, int seatingCount, Long idTrain, String trainName, Long idWarehouse, int posTrain, int type) {
-        this.id = id;
+    public Wagon(int seatingCount, Long idTrain, String trainName, Long idWarehouse, int posTrain, int type) {
         this.seatingCount = seatingCount;
         this.idTrain = idTrain;
         this.idWarehouse = idWarehouse;

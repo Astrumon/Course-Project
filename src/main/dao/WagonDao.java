@@ -7,9 +7,9 @@ import java.util.List;
 public interface WagonDao {
     String SQL_FIND_ALL = "SELECT * FROM " + Wagon.TABLE_NAME;
     String SQL_FIND_BY_ID = SQL_FIND_ALL + " WHERE " + Wagon.ID_COLUMN_COLUMN + "= ?";
-    String SQL_INSERT = "INSERT INTO " + Wagon.TABLE_NAME + "("+ Wagon.ID_COLUMN_COLUMN + "," + Wagon.SEATING_CAPACITY_COLUMN
+    String SQL_INSERT = "INSERT INTO " + Wagon.TABLE_NAME + "("+ Wagon.SEATING_CAPACITY_COLUMN
             + "," + Wagon.ID_WAREHOUSE_COLUMN + "," + Wagon.POSITION_TRAIN_COLUMN + "," + Wagon.TYPE_COLUMN
-            + ") VALUES(?,?,?,?,?)";
+            + ") VALUES(?,?,?,?)";
     String SQL_UPDATE = "UPDATE " + Wagon.TABLE_NAME + " SET " + Wagon.SEATING_CAPACITY_COLUMN + " = ?, "
             + Wagon.ID_WAREHOUSE_COLUMN + " = ?, "  + Wagon.POSITION_TRAIN_COLUMN + " = ?, "
             + Wagon.TYPE_COLUMN + " = ? "

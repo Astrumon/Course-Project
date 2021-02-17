@@ -19,52 +19,50 @@ public class Main {
         dataSource.setUrl(PATH_DB);
 
 
-        Wagon wagon = new Wagon(1l, 5, 1l, "", 1l, 3, 1);
-        Wagon wagon1 = new Wagon(4l, 15, 2l, "",  1l, 3, 2);
-        Wagon wagon2 = new Wagon(2l, 25, 3l,"", 1l, 3, 3);
-
-        WagonDaoImpl wagonDao = new WagonDaoImpl(dataSource);
-        wagonDao.insert(wagon);
-        wagonDao.insert(wagon1);
-        wagonDao.insert(wagon2);
-
-        //wagonDao.delete(wagon1);
-
-        showAllWagons(wagonDao.findAll());
-
-        System.out.println();
-        WarehouseDaoImpl warehouseDao = new WarehouseDaoImpl(dataSource);
-
-        warehouseDao.delete(new Warehouse(1l, 4l, null));
-        Warehouse warehouse = new Warehouse(2l, 1l, "#1");
-        Warehouse warehouse1 = new Warehouse(3l, 2l, "#2");
-        Warehouse warehouse2 = new Warehouse(1l, 3l, "#2");
-
-        wagonDao.delete(wagon);
-        warehouseDao.delete(warehouse);
-        warehouseDao.delete(warehouse1);
-
-        warehouseDao.insert(warehouse);
-        warehouseDao.insert(warehouse1);
-        warehouseDao.insert(warehouse2);
-
-        showAllWarehouse(warehouseDao.findAll());
-
-        wagonDao.delete(wagon);
-        wagonDao.delete(wagon1);
-        wagonDao.delete(wagon2);
+//        Wagon wagon = new Wagon( 5, 1l, "", 1l, 3, 1);
+//        Wagon wagon1 = new Wagon( 15, 2l, "",  1l, 3, 2);
+//        Wagon wagon2 = new Wagon( 25, 3l,"", 1l, 3, 3);
+//
+//        WagonDaoImpl wagonDao = new WagonDaoImpl(dataSource);
+//        wagonDao.insert(wagon);
+//        wagonDao.insert(wagon1);
+//        wagonDao.insert(wagon2);
+//
+//        wagonDao.delete(wagon1);
+//
+//        showAllWagons(wagonDao.findAll());
+//
+//        System.out.println();
+//        WarehouseDaoImpl warehouseDao = new WarehouseDaoImpl(dataSource);
+//
+//        Warehouse warehouse = new Warehouse( 1l, "#1");
+//        Warehouse warehouse1 = new Warehouse( 2l, "#2");
+//        Warehouse warehouse2 = new Warehouse( 3l, "#2");
+//
+//        warehouseDao.insert(warehouse);
+//        warehouseDao.insert(warehouse1);
+//        warehouseDao.insert(warehouse2);
+//
+//        showAllWarehouse(warehouseDao.findAll());
+//
+//        wagonDao.delete(wagon);
+//        wagonDao.delete(wagon1);
+//        wagonDao.delete(wagon2);
 
         TrainSetDaoImpl trainSetDao = new TrainSetDaoImpl(dataSource);
 
-        Train train = new Train();
-        train.setName("train#1");
-        train.setCount_wagon(5);
+        Train train1 = new Train();
+        train1.setName("train#1");
+        train1.setCount_wagon(5);
+
+        Train train2 = new Train();
+        train2.setName("train#2");
+        train2.setCount_wagon(10);
 
         TrainDaoImpl trainDao = new TrainDaoImpl(dataSource);
-        trainDao.insert(train);
+        trainDao.insert(train1);
+        trainDao.insert(train2);
         showAllTrain(trainDao.findAll());
-
-
 
 //        TrainSet trainSet = new TrainSet();
 //        trainSet.setId(1l);

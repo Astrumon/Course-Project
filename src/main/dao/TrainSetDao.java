@@ -9,8 +9,7 @@ import java.util.List;
 public interface TrainSetDao {
     String SQL_FIND_ALL = "SELECT * FROM " + TrainSet.TABLE_NAME;
     String SQL_FIND_BY_ID = SQL_FIND_ALL + " WHERE " + TrainSet.ID_COLUMN + "= ?";
-    String SQL_INSERT = "INSERT INTO " + TrainSet.TABLE_NAME + "("+ TrainSet.ID_COLUMN  + ", " + TrainSet.NAME_COLUMN
-            + ") VALUES(?, ?, ?)";
+    String SQL_INSERT = "INSERT INTO " + TrainSet.TABLE_NAME + "(" + TrainSet.NAME_COLUMN + ") VALUES( ?, ?)";
     String SQL_INSERT_WAGON = "INSERT INTO " + TrainSet.TABLE_NAME + "(" + TrainSet.ID_WAGON_COLUMN +") VALUES(?)";
     String SQL_UPDATE = "UPDATE " + TrainSet.TABLE_NAME + " SET "
             + TrainSet.NAME_COLUMN + " = ?, "

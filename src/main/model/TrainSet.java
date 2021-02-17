@@ -8,8 +8,6 @@ public class TrainSet {
     public static final String NAME_COLUMN = "name";
     public static final String ID_WAGON_COLUMN = "id_wagon";
     public static final String POS_WAGON_COLUMN = "pos_wagon";
-
-
     public static final String ID_COLUMN = "id";
 
     private int posWagon;
@@ -21,8 +19,7 @@ public class TrainSet {
 
     }
 
-    public TrainSet(Long id, Long id_wagon, String name) {
-        this.id = id;
+    public TrainSet( Long id_wagon, String name) {
         this.idWagon = id_wagon;
         this.name = name;
     }

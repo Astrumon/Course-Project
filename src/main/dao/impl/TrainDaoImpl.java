@@ -102,9 +102,8 @@ public class TrainDaoImpl implements TrainDao {
             connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
 
-            preparedStatement.setLong(1, train.getId());
-            preparedStatement.setString(2, train.getName());
-            preparedStatement.setInt(3, train.getCount_wagon());
+            preparedStatement.setString(1, train.getName());
+            preparedStatement.setInt(2, train.getCount_wagon());
             preparedStatement.execute();
             ResultSet rs = preparedStatement.getGeneratedKeys();
             while (rs.next()) {

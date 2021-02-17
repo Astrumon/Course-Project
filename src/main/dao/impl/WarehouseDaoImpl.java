@@ -123,9 +123,8 @@ public class WarehouseDaoImpl implements WarehouseDao {
         try {
             connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setLong(1, warehouse.getId());
-            preparedStatement.setLong(2,  warehouse.getIdWagon());
-            preparedStatement.setString(3, warehouse.getName());
+            preparedStatement.setLong(1,  warehouse.getIdWagon());
+            preparedStatement.setString(2, warehouse.getName());
             preparedStatement.execute();
             ResultSet rs = preparedStatement.getGeneratedKeys();
             while (rs.next()) {

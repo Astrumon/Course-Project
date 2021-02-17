@@ -16,8 +16,7 @@ public class Warehouse {
     public Warehouse() {
 
     }
-    public Warehouse(Long id, Long idWagon, String name) {
-        this.id = id;
+    public Warehouse( Long idWagon, String name) {
         this.name = name;
         this.idWagon = idWagon;
     }
