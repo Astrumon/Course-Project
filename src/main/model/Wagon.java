@@ -8,10 +8,12 @@ public class Wagon {
     public static final String POSITION_TRAIN_COLUMN = "pos_train";
     public static final String SEATING_CAPACITY_COLUMN = "seatingCapacity";
     public static final String TYPE_COLUMN = "type";
+    public static final String TRAIN_NAME_COLUMN = "train_name";
 
     public static final int PASSENGER_TYPE = 1;
     public static final int CARGO_TYPE = 2;
 
+    private String trainName;
     private Long id;
     private int seatingCount;
     private Long idTrain;
@@ -22,12 +24,13 @@ public class Wagon {
 
     }
 
-    public Wagon(Long id, int seatingCount, Long idTrain, Long idWarehouse, int posTrain, int type) {
+    public Wagon(Long id, int seatingCount, Long idTrain, String trainName, Long idWarehouse, int posTrain, int type) {
         this.id = id;
         this.seatingCount = seatingCount;
         this.idTrain = idTrain;
         this.idWarehouse = idWarehouse;
         this.posTrain = posTrain;
+        this.trainName = trainName;
 
         checkType(type);
 
@@ -89,6 +92,14 @@ public class Wagon {
         this.seatingCount = seatingCount;
     }
 
+    public String getTrainName() {
+        return trainName;
+    }
+
+    public void setTrainName(String trainName) {
+        this.trainName = trainName;
+    }
+
     private String defineType(int type) {
         String result = "";
         switch (type) {
@@ -105,6 +116,6 @@ public class Wagon {
     public String toString() {
         return "Wagon [id= " + this.id + ", seatingCapacity= " + this.seatingCount
                 + ", idWarehouse= " + this.idWarehouse + ", idTrain= " + this.idTrain
-                + ", posTrain= " + this.posTrain + ", type= " + defineType(this.type)  +"]";
+                + ", posTrain= " + this.posTrain + ", trainName= " + this.trainName +", type= " + defineType(this.type)  +"]";
     }
 }

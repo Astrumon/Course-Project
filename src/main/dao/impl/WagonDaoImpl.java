@@ -111,10 +111,9 @@ public class WagonDaoImpl implements WagonDao {
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setLong(1, wagon.getId());
             preparedStatement.setLong(2, wagon.getSeatingCount());
-            preparedStatement.setLong(3, wagon.getIdTrain());
-            preparedStatement.setLong(4, wagon.getIdWarehouse());
-            preparedStatement.setLong(5, wagon.getPosTrain());
-            preparedStatement.setInt(6, wagon.getType());
+            preparedStatement.setLong(3, wagon.getIdWarehouse());
+            preparedStatement.setLong(4, wagon.getPosTrain());
+            preparedStatement.setInt(5, wagon.getType());
             preparedStatement.execute();
             ResultSet rs = preparedStatement.getGeneratedKeys();
             while (rs.next()) {
@@ -140,11 +139,10 @@ public class WagonDaoImpl implements WagonDao {
             connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE);
             preparedStatement.setLong(1, wagon.getSeatingCount());
-            preparedStatement.setLong(2, wagon.getIdTrain());
-            preparedStatement.setLong(3, wagon.getIdWarehouse());
-            preparedStatement.setLong(4, wagon.getPosTrain());
-            preparedStatement.setInt(5, wagon.getType());
-            preparedStatement.setLong(6, wagon.getId());
+            preparedStatement.setLong(2, wagon.getIdWarehouse());
+            preparedStatement.setLong(3, wagon.getPosTrain());
+            preparedStatement.setInt(4, wagon.getType());
+            preparedStatement.setLong(5, wagon.getId());
             preparedStatement.execute();
 
         } catch (SQLException exc) {
