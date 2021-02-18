@@ -19,8 +19,8 @@ public class TrainSet {
 
     }
 
-    public TrainSet( Long id_wagon, String name) {
-        this.idWagon = id_wagon;
+    public TrainSet( String name, int posWagon) {
+        this.posWagon = posWagon;
         this.name = name;
     }
 
@@ -73,7 +73,6 @@ public class TrainSet {
 ////            listWagons.append(wagon.getId());
 ////        }
 ////        return result + listWagons + "}]";
-        return "TrainSet[id= " + this.id + ", idWagon= " + this.idWagon
-                + ", name= " + this.name + ", posWagon= " + this.posWagon;
+        return "TrainSet[ trainName= " + this.name + ", idWagon= " + this.idWagon + ", posWagon=" + this.posWagon +"]";
     }
 }

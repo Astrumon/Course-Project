@@ -29,8 +29,9 @@ public class WagonDaoImpl implements WagonDao {
                 Wagon wagon = new Wagon();
                 wagon.setId(rs.getLong(Wagon.ID_COLUMN_COLUMN));
                 wagon.setSeatingCount(rs.getInt(Wagon.SEATING_CAPACITY_COLUMN));
-                wagon.setIdTrain(rs.getLong(Wagon.ID_TRAIN_COLUMN));
-                wagon.setIdWarehouse(rs.getLong(Wagon.ID_WAREHOUSE_COLUMN));
+                wagon.setIdWagon(rs.getLong(Wagon.ID_WAGON_COLUMN));
+                wagon.setNameWarehouse(rs.getString(Wagon.NAME_WAREHOUSE_COLUMN));
+                wagon.setTrainName(rs.getString(Wagon.TRAIN_NAME_COLUMN));
                 wagon.setPosTrain(rs.getInt(Wagon.POSITION_TRAIN_COLUMN));
                 wagon.setType(rs.getInt(Wagon.TYPE_COLUMN));
                 wagons.add(wagon);
@@ -61,8 +62,39 @@ public class WagonDaoImpl implements WagonDao {
                 wagon = new Wagon();
                 wagon.setId(rs.getLong(Wagon.ID_COLUMN_COLUMN));
                 wagon.setSeatingCount(rs.getInt(Wagon.SEATING_CAPACITY_COLUMN));
-                wagon.setIdTrain(rs.getLong(Wagon.ID_TRAIN_COLUMN));
-                wagon.setIdWarehouse(rs.getLong(Wagon.ID_WAREHOUSE_COLUMN));
+                wagon.setIdWagon(rs.getLong(Wagon.ID_WAGON_COLUMN));
+                wagon.setNameWarehouse(rs.getString(Wagon.NAME_WAREHOUSE_COLUMN));
+                wagon.setPosTrain(rs.getInt(Wagon.POSITION_TRAIN_COLUMN));
+                wagon.setType(rs.getInt(Wagon.TYPE_COLUMN));
+            }
+        } catch (SQLException exc) {
+            System.out.println(exc);
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException exc) {
+                System.out.println(exc);
+            }
+        }
+        return wagon;
+    }
+
+    @Override
+    public Wagon findByIdWagon(Long id) {
+        Connection connection = null;
+        Wagon wagon = null;
+        try {
+            connection = dataSource.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_BY_ID_WAGON);
+            preparedStatement.setLong(1, id);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                wagon = new Wagon();
+                wagon.setId(rs.getLong(Wagon.ID_COLUMN_COLUMN));
+                wagon.setSeatingCount(rs.getInt(Wagon.SEATING_CAPACITY_COLUMN));
+                wagon.setIdWagon(rs.getLong(Wagon.ID_WAGON_COLUMN));
+                wagon.setTrainName(rs.getString(Wagon.TRAIN_NAME_COLUMN));
+                wagon.setNameWarehouse(rs.getString(Wagon.NAME_WAREHOUSE_COLUMN));
                 wagon.setPosTrain(rs.getInt(Wagon.POSITION_TRAIN_COLUMN));
                 wagon.setType(rs.getInt(Wagon.TYPE_COLUMN));
             }
@@ -110,8 +142,8 @@ public class WagonDaoImpl implements WagonDao {
             connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setLong(1, wagon.getSeatingCount());
-            preparedStatement.setLong(2, wagon.getIdWarehouse());
-            preparedStatement.setLong(3, wagon.getPosTrain());
+            preparedStatement.setString(2, wagon.getNameWarehouse());
+            preparedStatement.setLong(3, wagon.getIdWagon());
             preparedStatement.setInt(4, wagon.getType());
             preparedStatement.execute();
             ResultSet rs = preparedStatement.getGeneratedKeys();
@@ -138,10 +170,11 @@ public class WagonDaoImpl implements WagonDao {
             connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE);
             preparedStatement.setLong(1, wagon.getSeatingCount());
-            preparedStatement.setLong(2, wagon.getIdWarehouse());
+            preparedStatement.setString(2, wagon.getNameWarehouse());
             preparedStatement.setLong(3, wagon.getPosTrain());
-            preparedStatement.setInt(4, wagon.getType());
-            preparedStatement.setLong(5, wagon.getId());
+            preparedStatement.setLong(4, wagon.getIdWagon());
+            preparedStatement.setInt(5, wagon.getType());
+            preparedStatement.setLong(6, wagon.getId());
             preparedStatement.execute();
 
         } catch (SQLException exc) {

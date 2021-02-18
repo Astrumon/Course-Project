@@ -3,8 +3,8 @@ package main.model;
 public class Wagon {
     public static final String TABLE_NAME = "wagon";
     public static final String ID_COLUMN_COLUMN = "id";
-    public static final String ID_TRAIN_COLUMN = "id_train";
-    public static final String ID_WAREHOUSE_COLUMN = "id_warehouse";
+    public static final String ID_WAGON_COLUMN = "id_wagon";
+    public static final String NAME_WAREHOUSE_COLUMN = "name_warehouse";
     public static final String POSITION_TRAIN_COLUMN = "pos_train";
     public static final String SEATING_CAPACITY_COLUMN = "seatingCapacity";
     public static final String TYPE_COLUMN = "type";
@@ -16,18 +16,18 @@ public class Wagon {
     private String trainName;
     private Long id;
     private int seatingCount;
-    private Long idTrain;
-    private Long idWarehouse;
+    private Long idWagon;
+    private String nameWarehouse;
     private int posTrain, type;
 
     public Wagon() {
 
     }
 
-    public Wagon(int seatingCount, Long idTrain, String trainName, Long idWarehouse, int posTrain, int type) {
+    public Wagon(int seatingCount, Long idWagon, String trainName, String nameWarehouse, int posTrain, int type) {
         this.seatingCount = seatingCount;
-        this.idTrain = idTrain;
-        this.idWarehouse = idWarehouse;
+        this.idWagon = idWagon;
+        this.nameWarehouse = nameWarehouse;
         this.posTrain = posTrain;
         this.trainName = trainName;
 
@@ -59,20 +59,20 @@ public class Wagon {
         this.id = id;
     }
 
-    public Long getIdTrain() {
-        return idTrain;
+    public Long getIdWagon() {
+        return idWagon;
     }
 
-    public void setIdTrain(Long idTrain) {
-        this.idTrain = idTrain;
+    public void setIdWagon(Long idWagon) {
+        this.idWagon = idWagon;
     }
 
-    public Long getIdWarehouse() {
-        return idWarehouse;
+    public String getNameWarehouse() {
+        return nameWarehouse;
     }
 
-    public void setIdWarehouse(Long idWarehouse) {
-        this.idWarehouse = idWarehouse;
+    public void setNameWarehouse(String nameWarehouse) {
+        this.nameWarehouse = nameWarehouse;
     }
 
     public int getPosTrain() {
@@ -114,7 +114,7 @@ public class Wagon {
     @Override
     public String toString() {
         return "Wagon [id= " + this.id + ", seatingCapacity= " + this.seatingCount
-                + ", idWarehouse= " + this.idWarehouse + ", idTrain= " + this.idTrain
+                + ", nameWarehouse= " + this.nameWarehouse + ", idWagon= " + this.idWagon
                 + ", posTrain= " + this.posTrain + ", trainName= " + this.trainName +", type= " + defineType(this.type)  +"]";
     }
 }

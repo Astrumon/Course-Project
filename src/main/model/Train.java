@@ -14,6 +14,8 @@ public class Train {
 
     }
 
+
+
     public Train(String name, int count_wagon) {
         this.name = name;
         this.count_wagon = count_wagon;
@@ -45,6 +47,6 @@ public class Train {
 
     @Override
     public String toString() {
-        return "Train[id= " + this.id + ", name= " + this.name + ", countWagon= " + this.count_wagon + "]";
+        return "Train[name= "  +  this.name + ", countWagon= " + this.count_wagon + "]";
     }
 }

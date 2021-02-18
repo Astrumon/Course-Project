@@ -19,111 +19,38 @@ public class Main {
         dataSource.setUrl(PATH_DB);
 
 
-//        Wagon wagon = new Wagon( 5, 1l, "", 1l, 3, 1);
-//        Wagon wagon1 = new Wagon( 15, 2l, "",  1l, 3, 2);
-//        Wagon wagon2 = new Wagon( 25, 3l,"", 1l, 3, 3);
 //
-//        WagonDaoImpl wagonDao = new WagonDaoImpl(dataSource);
-//        wagonDao.insert(wagon);
-//        wagonDao.insert(wagon1);
-//        wagonDao.insert(wagon2);
-//
-//        wagonDao.delete(wagon1);
-//
-//        showAllWagons(wagonDao.findAll());
-//
-//        System.out.println();
-//        WarehouseDaoImpl warehouseDao = new WarehouseDaoImpl(dataSource);
-//
-//        Warehouse warehouse = new Warehouse( 1l, "#1");
-//        Warehouse warehouse1 = new Warehouse( 2l, "#2");
-//        Warehouse warehouse2 = new Warehouse( 3l, "#2");
-//
-//        warehouseDao.insert(warehouse);
-//        warehouseDao.insert(warehouse1);
-//        warehouseDao.insert(warehouse2);
-//
-//        showAllWarehouse(warehouseDao.findAll());
-//
-//        wagonDao.delete(wagon);
-//        wagonDao.delete(wagon1);
-//        wagonDao.delete(wagon2);
-
         TrainSetDaoImpl trainSetDao = new TrainSetDaoImpl(dataSource);
 
         Train train1 = new Train();
-        train1.setName("train#1");
+        train1.setName("train#4");
         train1.setCount_wagon(5);
-
-        Train train2 = new Train();
-        train2.setName("train#2");
-        train2.setCount_wagon(10);
 
         TrainDaoImpl trainDao = new TrainDaoImpl(dataSource);
         trainDao.insert(train1);
-        trainDao.insert(train2);
+        //trainDao.deleteByName(train1);
+       // trainSetDao.deleteByTrainName(train1);
+
+        TrainSet trainSet = new TrainSet();
+        trainSet.setName("train#2");
+        trainSet.setPosWagon(3);
+        Train tr = new Train();
+        tr.setName(null);
+
+
+        Wagon wagon = new Wagon( 5, 2l, null, "#1", 0, 1);
+        WagonDaoImpl wagonDao = new WagonDaoImpl(dataSource);
+        //wagonDao.insert(wagon);
+        showAllWagons(wagonDao.findAll());
+        //trainSetDao.addWagon(trainSet, wagonDao.findByIdWagon(wagon.getIdWagon()));
+       // trainSetDao.deleteByTrainName(tr);
+
         showAllTrain(trainDao.findAll());
 
-//        TrainSet trainSet = new TrainSet();
-//        trainSet.setId(1l);
-//        trainSet.setName("trainSet1");
-//        trainSet.setCountWagons(3);
-//
-//        TrainSet trainSet1 = new TrainSet();
-//        trainSet1.setId(2l);
-//        trainSet1.setName("trainSet1");
-//
-//        TrainSet trainSet2 = new TrainSet();
-//        trainSet2.setId(3l);
-//        trainSet2.setName("trainSet1");
-//
-//        TrainSet trainSet3 = new TrainSet();
-//        trainSet3.setId(4l);
-//        trainSet3.setName("trainSet1");
-//
-//        TrainSet trainSet4 = new TrainSet();
-//        trainSet4.setId(5l);
-//        trainSet4.setCountWagons(10);
-//        trainSet4.setName("trainSet2");
-//
-//        TrainSet trainSet5 = new TrainSet();
-//        trainSet5.setId(6l);
-//        trainSet5.setName("trainSet2");
-//
-//        TrainSet trainSet6 = new TrainSet();
-//        trainSet6.setId(7l);
-//        trainSet6.setName("trainSet1");
-//
-//        System.out.println(trainSet1);
-//        System.out.println(trainSet.toString());
-
-
         System.out.println();
-//        trainDao.insert(trainSet6);
-//        trainDao.insert(trainSet3);
-//        trainDao.insert(trainSet4);
-//        trainDao.insert(trainSet5);
-//        trainDao.insert(trainSet2);
-//        trainDao.insert(trainSet);
-//        trainDao.insert(trainSet1);
-//        trainDao.delete(trainSet);
-//        trainDao.delete(trainSet1);
-//        trainDao.delete(trainSet2);
-//        trainDao.delete(trainSet3);
-//        trainDao.delete(trainSet4);
-//        trainDao.delete(trainSet5);
-//        trainDao.delete(trainSet6);
+        showAllTrainSet(trainSetDao.findAll());
 
-       // showAllTrainSet(trainDao.findAll());
-
-
-
-
-
-
-
-
-
+        showAllWagons(wagonDao.findAll());
     }
 
     public static void showWagon(Wagon wagon) {

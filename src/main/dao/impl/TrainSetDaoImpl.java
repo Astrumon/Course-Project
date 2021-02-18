@@ -2,6 +2,7 @@ package main.dao.impl;
 
 import main.DataSource;
 import main.dao.TrainSetDao;
+import main.model.Train;
 import main.model.TrainSet;
 import main.model.Wagon;
 
@@ -19,32 +20,53 @@ public class TrainSetDaoImpl implements TrainSetDao {
     }
 
     @Override
-    public boolean addWagon(Wagon wagon) {
+    public boolean addWagon(TrainSet trainSet, Wagon wagon) {
         Connection connection = null;
-        trainSets = findAll();
 
-        for (TrainSet trainSet : trainSets) {
 
-        }
-        try {
-            connection = dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_WAGON);
+        assert wagon != null;
+        if (trainSet.getName().equals(wagon.getTrainName()) || wagon.getTrainName() == null && wagon.getPosTrain() == 0) {
+            wagon.setTrainName(trainSet.getName());
+            wagon.setPosTrain(trainSet.getPosWagon());
+            trainSet.setIdWagon(wagon.getIdWagon());
 
-        } catch (SQLException exc) {
-            System.out.println(exc);
-        } finally {
+
             try {
-                connection.close();
+                connection = dataSource.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(SQL_ADD_WAGON);
+                preparedStatement.setLong(1, trainSet.getIdWagon());
+                preparedStatement.setString(2, trainSet.getName());
+                preparedStatement.setInt(3, trainSet.getPosWagon());
+                preparedStatement.execute();
+
+                String SQL_UPDATE_TRAIN_NAME_AND_POS = "UPDATE " + Wagon.TABLE_NAME + " SET "
+                        + Wagon.TRAIN_NAME_COLUMN + " = ?, " + Wagon.POSITION_TRAIN_COLUMN + " = ? WHERE "
+                        + Wagon.ID_WAGON_COLUMN + " = ?";
+                PreparedStatement preparedStatementWagon = connection.prepareStatement(SQL_UPDATE_TRAIN_NAME_AND_POS);
+                preparedStatementWagon.setString(1, wagon.getTrainName());
+                preparedStatementWagon.setInt(2, trainSet.getPosWagon());
+                preparedStatementWagon.setLong(3, trainSet.getIdWagon());
+                preparedStatementWagon.execute();
             } catch (SQLException exc) {
                 System.out.println(exc);
+            } finally {
+                try {
+                    connection.close();
+                } catch (SQLException exc) {
+                    System.out.println(exc);
+                }
             }
+        } else {
+            System.out.println("position is taken");
         }
-        return false;
+        return true;
     }
+
+
     @Override
     public List<TrainSet> findAll() {
         Connection connection = null;
-         trainSets = new ArrayList<TrainSet>();
+        trainSets = new ArrayList<TrainSet>();
 
         try {
             connection = dataSource.getConnection();
@@ -56,6 +78,7 @@ public class TrainSetDaoImpl implements TrainSetDao {
                 trainSet.setId(rs.getLong(TrainSet.ID_COLUMN));
                 trainSet.setName(rs.getString(TrainSet.NAME_COLUMN));
                 trainSet.setIdWagon(rs.getLong(TrainSet.ID_WAGON_COLUMN));
+                trainSet.setPosWagon(rs.getInt(TrainSet.POS_WAGON_COLUMN));
                 trainSets.add(trainSet);
             }
         } catch (SQLException exc) {
@@ -121,46 +144,68 @@ public class TrainSetDaoImpl implements TrainSetDao {
     }
 
     @Override
-    public void insert(TrainSet trainSet) {
+    public void deleteByTrainName(Train train) {
         Connection connection = null;
-        trainSets = findAll();
-        //TODO занести в метод
-        if (trainSets != null) {
-            int countWagons = 0;
-            for (TrainSet value : trainSets) {
-                if (value.getName().equals(trainSet.getName()) && value.getPosWagon() != 0) {
-                    countWagons = value.getPosWagon();
-                    if (countWagons != 0) {
-                        countWagons--;
-                        trainSet.setPosWagon(countWagons);
-                    }
-                }
-            }
-        }
-        if (trainSet.getPosWagon() != 0) {
-            try {
-                connection = dataSource.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
-                preparedStatement.setString(1, trainSet.getName());
-                preparedStatement.execute();
-                ResultSet rs = preparedStatement.getGeneratedKeys();
-                while (rs.next()) {
-                    trainSet.setId(rs.getLong(1));
-                }
+        try {
+            connection = dataSource.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_BY_TRAIN_NAME);
+            preparedStatement.setString(1, train.getName());
+            preparedStatement.execute();
 
+        } catch (SQLException exc) {
+            System.out.println(exc);
+        } finally {
+            try {
+                connection.close();
             } catch (SQLException exc) {
                 System.out.println(exc);
-            } finally {
-                try {
-                    connection.close();
-//                System.out.println("in method insert: size trainSets" + trainSets.size());
-                } catch (SQLException exc) {
-                    System.out.println(exc);
-                }
             }
-        } else {
-            showError(trainSet.getName() + " - мест больше нет");
         }
+    }
+
+    @Override
+    public void insert(TrainSet trainSet) {
+        Connection connection = null;
+        // trainSets = findAll();
+//        //TODO занести в метод
+//        if (trainSets != null) {
+//            int countWagons = 0;
+//            for (TrainSet value : trainSets) {
+//                if (value.getName().equals(trainSet.getName()) && value.getPosWagon() != 0) {
+//                    countWagons = value.getPosWagon();
+//                    if (countWagons != 0) {
+//                        countWagons--;
+//                        trainSet.setPosWagon(countWagons);
+//                    }
+//                }
+//            }
+//        }
+//        if (trainSet.getPosWagon() != 0) {
+        try {
+            connection = dataSource.getConnection();
+
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, trainSet.getName());
+            preparedStatement.setInt(2, trainSet.getPosWagon());
+            preparedStatement.execute();
+            ResultSet rs = preparedStatement.getGeneratedKeys();
+            while (rs.next()) {
+                trainSet.setId(rs.getLong(1));
+            }
+
+        } catch (SQLException exc) {
+            System.out.println(exc);
+        } finally {
+            try {
+                connection.close();
+//                System.out.println("in method insert: size trainSets" + trainSets.size());
+            } catch (SQLException exc) {
+                System.out.println(exc);
+            }
+        }
+//        } else {
+//            showError(trainSet.getName() + " - мест больше нет");
+//        }
     }
 
     @Override
@@ -185,6 +230,7 @@ public class TrainSetDaoImpl implements TrainSetDao {
             }
         }
     }
+
 
     private void showError(String text) {
         System.out.println(text);
