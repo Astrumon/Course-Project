@@ -1,4 +1,4 @@
-package main.model;
+package main.model.train;
 
 public class Train {
     public static final String TABLE_NAME = "train";
@@ -13,8 +13,6 @@ public class Train {
     public Train() {
 
     }
-
-
 
     public Train(String name, int count_wagon) {
         this.name = name;

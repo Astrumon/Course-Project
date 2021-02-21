@@ -1,12 +1,11 @@
 import main.DataSource;
-import main.dao.impl.TrainDaoImpl;
-import main.dao.impl.TrainSetDaoImpl;
+import main.dao.impl.train_dao_impl.TrainDaoImpl;
+import main.dao.impl.train_dao_impl.TrainSetDaoImpl;
 import main.dao.impl.WagonDaoImpl;
-import main.dao.impl.WarehouseDaoImpl;
-import main.model.Train;
-import main.model.TrainSet;
+import main.model.train.Train;
+import main.model.train.TrainSet;
 import main.model.Wagon;
-import main.model.Warehouse;
+import main.model.warehouse.Warehouse;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -27,8 +26,8 @@ public class Main {
         train1.setCount_wagon(5);
 
         TrainDaoImpl trainDao = new TrainDaoImpl(dataSource);
-        trainDao.insert(train1);
-        //trainDao.deleteByName(train1);
+        //trainDao.insert(train1);
+        trainDao.deleteByName(train1);
        // trainSetDao.deleteByTrainName(train1);
 
         TrainSet trainSet = new TrainSet();

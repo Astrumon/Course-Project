@@ -1,7 +1,6 @@
-package main.dao;
+package main.dao.train_dao;
 
-import main.model.Train;
-import main.model.TrainSet;
+import main.model.train.Train;
 
 import java.util.List;
 

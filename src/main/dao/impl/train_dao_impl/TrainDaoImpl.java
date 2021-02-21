@@ -1,9 +1,9 @@
-package main.dao.impl;
+package main.dao.impl.train_dao_impl;
 
 import main.DataSource;
-import main.dao.TrainDao;
-import main.model.Train;
-import main.model.TrainSet;
+import main.dao.train_dao.TrainDao;
+import main.model.train.Train;
+import main.model.train.TrainSet;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -104,6 +104,9 @@ public class TrainDaoImpl implements TrainDao {
             preparedStatement.setString(1, train.getName());
             preparedStatement.execute();
 
+            TrainSetDaoImpl trainSetDao = new TrainSetDaoImpl(dataSource);
+            trainSetDao.deleteByTrainName(train);
+
         } catch (SQLException exc) {
             System.out.println(exc);
         } finally {
@@ -139,24 +142,24 @@ public class TrainDaoImpl implements TrainDao {
             TrainSetDaoImpl trainSetDao = new TrainSetDaoImpl(dataSource);
             List<TrainSet> trainSets = trainSetDao.findAll();
             int counts = 0;
-                if (!trainSets.isEmpty()) {
-                    for (TrainSet trainSet : trainSets) {
-                        if (!trainSet.getName().equals(train.getName())) {
-                            if (counts == train.getCount_wagon()) {
-                                break;
-                            }
-                            for (int i = 1; i <= train.getCount_wagon(); i++) {
-                                trainSetDao.insert(new TrainSet(train.getName(), i));
-                                counts++;
-                            }
+            if (!trainSets.isEmpty()) {
+                for (TrainSet trainSet : trainSets) {
+                    if (!trainSet.getName().equals(train.getName())) {
+                        if (counts == train.getCount_wagon()) {
+                            break;
+                        }
+                        for (int i = 1; i <= train.getCount_wagon(); i++) {
+                            trainSetDao.insert(new TrainSet(train.getName(), i));
+                            counts++;
                         }
                     }
-                } else {
-
-                            for (int i = 1; i <= train.getCount_wagon(); i++) {
-                                trainSetDao.insert(new TrainSet(train.getName(), i));
-                            }
                 }
+            } else {
+
+                for (int i = 1; i <= train.getCount_wagon(); i++) {
+                    trainSetDao.insert(new TrainSet(train.getName(), i));
+                }
+            }
 
 
         } catch (SQLException exc) {

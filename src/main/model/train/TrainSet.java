@@ -1,4 +1,6 @@
-package main.model;
+package main.model.train;
+
+import main.model.Wagon;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,12 +69,6 @@ public class TrainSet {
 
     @Override
     public String toString() {
-//        String result = "TrainSet[id= " + this.id + ", wagons{";
-////        StringBuilder listWagons = new StringBuilder(" ");
-////        for (Wagon wagon : wagons) {
-////            listWagons.append(wagon.getId());
-////        }
-////        return result + listWagons + "}]";
         return "TrainSet[ trainName= " + this.name + ", idWagon= " + this.idWagon + ", posWagon=" + this.posWagon +"]";
     }
 }

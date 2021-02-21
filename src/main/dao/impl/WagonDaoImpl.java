@@ -142,9 +142,8 @@ public class WagonDaoImpl implements WagonDao {
             connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setLong(1, wagon.getSeatingCount());
-            preparedStatement.setString(2, wagon.getNameWarehouse());
-            preparedStatement.setLong(3, wagon.getIdWagon());
-            preparedStatement.setInt(4, wagon.getType());
+            preparedStatement.setLong(2, wagon.getIdWagon());
+            preparedStatement.setInt(3, wagon.getType());
             preparedStatement.execute();
             ResultSet rs = preparedStatement.getGeneratedKeys();
             while (rs.next()) {

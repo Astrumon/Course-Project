@@ -1,9 +1,9 @@
-package main.dao.impl;
+package main.dao.impl.train_dao_impl;
 
 import main.DataSource;
-import main.dao.TrainSetDao;
-import main.model.Train;
-import main.model.TrainSet;
+import main.dao.train_dao.TrainSetDao;
+import main.model.train.Train;
+import main.model.train.TrainSet;
 import main.model.Wagon;
 
 import java.sql.*;
@@ -13,7 +13,7 @@ import java.util.List;
 public class TrainSetDaoImpl implements TrainSetDao {
 
     private DataSource dataSource;
-    private List<TrainSet> trainSets;
+
 
     public TrainSetDaoImpl(DataSource dataSource) {
         this.dataSource = dataSource;
@@ -23,14 +23,11 @@ public class TrainSetDaoImpl implements TrainSetDao {
     public boolean addWagon(TrainSet trainSet, Wagon wagon) {
         Connection connection = null;
 
-
         assert wagon != null;
         if (trainSet.getName().equals(wagon.getTrainName()) || wagon.getTrainName() == null && wagon.getPosTrain() == 0) {
             wagon.setTrainName(trainSet.getName());
             wagon.setPosTrain(trainSet.getPosWagon());
             trainSet.setIdWagon(wagon.getIdWagon());
-
-
             try {
                 connection = dataSource.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(SQL_ADD_WAGON);
@@ -66,7 +63,7 @@ public class TrainSetDaoImpl implements TrainSetDao {
     @Override
     public List<TrainSet> findAll() {
         Connection connection = null;
-        trainSets = new ArrayList<TrainSet>();
+        List<TrainSet> trainSets = new ArrayList<TrainSet>();
 
         try {
             connection = dataSource.getConnection();
@@ -166,21 +163,6 @@ public class TrainSetDaoImpl implements TrainSetDao {
     @Override
     public void insert(TrainSet trainSet) {
         Connection connection = null;
-        // trainSets = findAll();
-//        //TODO занести в метод
-//        if (trainSets != null) {
-//            int countWagons = 0;
-//            for (TrainSet value : trainSets) {
-//                if (value.getName().equals(trainSet.getName()) && value.getPosWagon() != 0) {
-//                    countWagons = value.getPosWagon();
-//                    if (countWagons != 0) {
-//                        countWagons--;
-//                        trainSet.setPosWagon(countWagons);
-//                    }
-//                }
-//            }
-//        }
-//        if (trainSet.getPosWagon() != 0) {
         try {
             connection = dataSource.getConnection();
 
@@ -198,14 +180,10 @@ public class TrainSetDaoImpl implements TrainSetDao {
         } finally {
             try {
                 connection.close();
-//                System.out.println("in method insert: size trainSets" + trainSets.size());
             } catch (SQLException exc) {
                 System.out.println(exc);
             }
         }
-//        } else {
-//            showError(trainSet.getName() + " - мест больше нет");
-//        }
     }
 
     @Override
