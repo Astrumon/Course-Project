@@ -76,6 +76,7 @@ public class TrainSetDaoImpl implements TrainSetDao {
                 trainSet.setName(rs.getString(TrainSet.NAME_COLUMN));
                 trainSet.setIdWagon(rs.getLong(TrainSet.ID_WAGON_COLUMN));
                 trainSet.setPosWagon(rs.getInt(TrainSet.POS_WAGON_COLUMN));
+                trainSet.setIdTrain(rs.getLong(TrainSet.ID_TRAIN_COLUMN));
                 trainSets.add(trainSet);
             }
         } catch (SQLException exc) {
@@ -105,6 +106,7 @@ public class TrainSetDaoImpl implements TrainSetDao {
                 trainSet.setId(rs.getLong(TrainSet.ID_COLUMN));
                 trainSet.setName(rs.getString(TrainSet.NAME_COLUMN));
                 trainSet.setIdWagon(rs.getLong(TrainSet.ID_WAGON_COLUMN));
+                trainSet.setIdTrain(rs.getLong(TrainSet.ID_TRAIN_COLUMN));
             }
         } catch (SQLException exc) {
             System.out.println(exc);
@@ -195,7 +197,8 @@ public class TrainSetDaoImpl implements TrainSetDao {
 
             preparedStatement.setString(1, trainSet.getName());
             preparedStatement.setLong(2, trainSet.getIdWagon());
-            preparedStatement.setLong(3, trainSet.getId());
+            preparedStatement.setLong(3, trainSet.getIdTrain());
+            preparedStatement.setLong(4, trainSet.getId());
             preparedStatement.execute();
 
         } catch (SQLException exc) {

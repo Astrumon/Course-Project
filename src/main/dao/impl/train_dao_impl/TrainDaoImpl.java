@@ -104,8 +104,7 @@ public class TrainDaoImpl implements TrainDao {
             preparedStatement.setString(1, train.getName());
             preparedStatement.execute();
 
-            TrainSetDaoImpl trainSetDao = new TrainSetDaoImpl(dataSource);
-            trainSetDao.deleteByTrainName(train);
+            deleteTrainSet(train);
 
         } catch (SQLException exc) {
             System.out.println(exc);
@@ -123,11 +122,9 @@ public class TrainDaoImpl implements TrainDao {
     public void insert(Train train) {
         Connection connection = null;
 
-
         try {
             connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
-
 
             preparedStatement.setString(1, train.getName());
             preparedStatement.setInt(2, train.getCount_wagon());
@@ -139,8 +136,11 @@ public class TrainDaoImpl implements TrainDao {
                 train.setId(rs.getLong(1));
             }
 
+
             TrainSetDaoImpl trainSetDao = new TrainSetDaoImpl(dataSource);
             List<TrainSet> trainSets = trainSetDao.findAll();
+            
+            //TODO перенести в метод, создать запрос для TrainSetDao SQL_FIND_BY_TRAIN_NAME, и использовав его реализовать логику без циклов
             int counts = 0;
             if (!trainSets.isEmpty()) {
                 for (TrainSet trainSet : trainSets) {
@@ -167,11 +167,15 @@ public class TrainDaoImpl implements TrainDao {
         } finally {
             try {
                 connection.close();
-//                System.out.println("in method insert: size trainSets" + trainSets.size());
             } catch (SQLException exc) {
                 System.out.println(exc);
             }
         }
+    }
+
+    private void deleteTrainSet(Train train) {
+        TrainSetDaoImpl trainSetDao = new TrainSetDaoImpl(dataSource);
+        trainSetDao.deleteByTrainName(train);
     }
 
     @Override

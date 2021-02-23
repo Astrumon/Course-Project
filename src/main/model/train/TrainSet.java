@@ -11,11 +11,20 @@ public class TrainSet {
     public static final String ID_WAGON_COLUMN = "id_wagon";
     public static final String POS_WAGON_COLUMN = "pos_wagon";
     public static final String ID_COLUMN = "id";
+    public static final String ID_TRAIN_COLUMN = "id_train";
 
     private int posWagon;
-    private Long id, idWagon;
+    private Long id, idWagon, idTrain;
     private String name;
     private List<Wagon> wagons = new ArrayList<Wagon>(10);
+
+    public Long getIdTrain() {
+        return idTrain;
+    }
+
+    public void setIdTrain(Long idTrain) {
+        this.idTrain = idTrain;
+    }
 
     public TrainSet() {
 
@@ -69,6 +78,10 @@ public class TrainSet {
 
     @Override
     public String toString() {
-        return "TrainSet[ trainName= " + this.name + ", idWagon= " + this.idWagon + ", posWagon=" + this.posWagon +"]";
+        return "TrainSet[ trainName= " + this.name
+                + ", idWagon= " + this.idWagon
+                + ", posWagon=" + this.posWagon
+                + ", idTrain= " + this.idTrain
+                +"]";
     }
 }

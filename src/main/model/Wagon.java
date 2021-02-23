@@ -9,16 +9,34 @@ public class Wagon {
     public static final String SEATING_CAPACITY_COLUMN = "seatingCapacity";
     public static final String TYPE_COLUMN = "type";
     public static final String TRAIN_NAME_COLUMN = "train_name";
+    public static final String ID_TRAIN_SET_COLUMN = "id_train_set";
+    public static final String ID_WAREHOUSE_SET_COLUMN = "id_warehouse_set";
 
     public static final int PASSENGER_TYPE = 1;
     public static final int CARGO_TYPE = 2;
 
     private String trainName;
-    private Long id;
+    private Long id, idTrainSet, idWarehouseSet;
     private int seatingCount;
     private Long idWagon;
     private String nameWarehouse;
     private int posTrain, type;
+
+    public Long getIdTrainSet() {
+        return idTrainSet;
+    }
+
+    public void setIdTrainSet(Long idTrainSet) {
+        this.idTrainSet = idTrainSet;
+    }
+
+    public Long getIdWarehouseSet() {
+        return idWarehouseSet;
+    }
+
+    public void setIdWarehouseSet(Long idWarehouseSet) {
+        this.idWarehouseSet = idWarehouseSet;
+    }
 
     public Wagon() {
 
@@ -115,6 +133,10 @@ public class Wagon {
     public String toString() {
         return "Wagon [id= " + this.id + ", seatingCapacity= " + this.seatingCount
                 + ", nameWarehouse= " + this.nameWarehouse + ", idWagon= " + this.idWagon
-                + ", posTrain= " + this.posTrain + ", trainName= " + this.trainName +", type= " + defineType(this.type)  +"]";
+                + ", posTrain= " + this.posTrain + ", trainName= " + this.trainName
+                + ", type= " + defineType(this.type)
+                + ", idTrainSet = " + this.idTrainSet
+                + ", idWarehouseSet = " + this.idWarehouseSet
+                +"]";
     }
 }

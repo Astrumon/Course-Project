@@ -10,11 +10,16 @@ import java.util.List;
 public interface TrainSetDao {
     String SQL_FIND_ALL = "SELECT * FROM " + TrainSet.TABLE_NAME;
     String SQL_FIND_BY_ID = SQL_FIND_ALL + " WHERE " + TrainSet.ID_COLUMN + "= ?";
-    String SQL_INSERT = "INSERT INTO " + TrainSet.TABLE_NAME + "(" + TrainSet.NAME_COLUMN + ", " + TrainSet.POS_WAGON_COLUMN +") VALUES( ?,?)";
-    String SQL_ADD_WAGON = "UPDATE " + TrainSet.TABLE_NAME + " SET " + TrainSet.ID_WAGON_COLUMN +" = ? WHERE " + TrainSet.NAME_COLUMN + " = ? AND " + TrainSet.POS_WAGON_COLUMN + " =?";
+    String SQL_INSERT = "INSERT INTO " + TrainSet.TABLE_NAME
+            + "(" + TrainSet.NAME_COLUMN + ", "
+            + TrainSet.POS_WAGON_COLUMN +") VALUES( ?,?)";
+    String SQL_ADD_WAGON = "UPDATE " + TrainSet.TABLE_NAME + " SET "
+            + TrainSet.ID_WAGON_COLUMN +" = ? WHERE "
+            + TrainSet.NAME_COLUMN + " = ? AND " + TrainSet.POS_WAGON_COLUMN + " =?";
     String SQL_UPDATE = "UPDATE " + TrainSet.TABLE_NAME + " SET "
             + TrainSet.NAME_COLUMN + " = ?, "
-            + TrainSet.ID_WAGON_COLUMN + " = ? "
+            + TrainSet.ID_WAGON_COLUMN + " = ?, "
+            + TrainSet.ID_TRAIN_COLUMN + " = ? "
             + " WHERE " + TrainSet.ID_COLUMN + " = ?";
     String SQL_DELETE = "DELETE FROM " + TrainSet.TABLE_NAME + " WHERE " + TrainSet.ID_COLUMN + " = ?";
     String SQL_DELETE_BY_TRAIN_NAME = "DELETE FROM " + TrainSet.TABLE_NAME + " WHERE " + TrainSet.NAME_COLUMN + " = ?";

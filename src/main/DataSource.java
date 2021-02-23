@@ -1,5 +1,8 @@
 package main;
 
+import org.sqlite.SQLiteConfig;
+import org.sqlite.javax.SQLiteConnectionPoolDataSource;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -8,7 +11,9 @@ public class DataSource {
     private String url;
 
     public Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(url);
+        SQLiteConfig config = new SQLiteConfig();
+        config.enforceForeignKeys(true);
+        return DriverManager.getConnection(url, config.toProperties());
     }
 
     public void closeConnection(Connection connection) {

@@ -17,8 +17,6 @@ public class Main {
         DataSource dataSource = new DataSource();
         dataSource.setUrl(PATH_DB);
 
-
-//
         TrainSetDaoImpl trainSetDao = new TrainSetDaoImpl(dataSource);
 
         Train train1 = new Train();

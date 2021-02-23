@@ -174,7 +174,7 @@ public class WarehouseDaoImpl implements WarehouseDao {
                             break;
                         }
                         for (int i = 1; i <= warehouse.getCapacity(); i++) {
-                            warehouseSetDao.insert(new WarehouseSet(warehouse.getName(), i));
+                            warehouseSetDao.insert(new WarehouseSet(warehouse.getName(), i, warehouse.getId()));
                             counts++;
                         }
                     }
@@ -182,7 +182,7 @@ public class WarehouseDaoImpl implements WarehouseDao {
             } else {
 
                 for (int i = 1; i <= warehouse.getCapacity(); i++) {
-                    warehouseSetDao.insert(new WarehouseSet(warehouse.getName(), i));
+                    warehouseSetDao.insert(new WarehouseSet(warehouse.getName(), i, warehouse.getId()));
                 }
             }
 
@@ -206,10 +206,8 @@ public class WarehouseDaoImpl implements WarehouseDao {
             preparedStatement.setString(1, warehouse.getName());
             preparedStatement.execute();
 
-            WarehouseSetDaoImpl warehouseSetDao = new WarehouseSetDaoImpl(dataSource);
-           // for (WarehouseSet warehouseSet : warehouseSetDao.findAll()) {
-                warehouseSetDao.deleteByWarehouseName(warehouse);
-           // }
+            //deleteWarehouseSet(warehouse);
+
         } catch (SQLException exc) {
             System.out.println(exc);
         } finally {
@@ -219,5 +217,10 @@ public class WarehouseDaoImpl implements WarehouseDao {
                 System.out.println(exc);
             }
         }
+    }
+
+    private void deleteWarehouseSet(Warehouse warehouse) {
+        WarehouseSetDaoImpl warehouseSetDao = new WarehouseSetDaoImpl(dataSource);
+        warehouseSetDao.deleteByWarehouseName(warehouse);
     }
 }
