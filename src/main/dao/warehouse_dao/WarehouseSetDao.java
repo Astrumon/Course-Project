@@ -43,7 +43,7 @@ public interface WarehouseSetDao {
 
     void update(WarehouseSet warehouseSet);
 
-    void addWagon(WarehouseSet warehouseSet, Wagon wagon, int position);
+    void addWagon(String warehouseName, Wagon wagon, int position);
 
     void insert(WarehouseSet warehouseSet);
 

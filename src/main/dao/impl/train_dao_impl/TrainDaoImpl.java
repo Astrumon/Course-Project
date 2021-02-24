@@ -118,6 +118,12 @@ public class TrainDaoImpl implements TrainDao {
     }
 
 
+    private void createTrainSetPosition(Train train) {
+        TrainSetDaoImpl trainSetDao = new TrainSetDaoImpl(dataSource);
+        for (int i = 1; i <= train.getCount_wagon(); i++) {
+            trainSetDao.insert(new TrainSet(train.getName(), i, train.getId()));
+        }
+    }
     @Override
     public void insert(Train train) {
         Connection connection = null;
@@ -136,30 +142,27 @@ public class TrainDaoImpl implements TrainDao {
                 train.setId(rs.getLong(1));
             }
 
-
-            TrainSetDaoImpl trainSetDao = new TrainSetDaoImpl(dataSource);
-            List<TrainSet> trainSets = trainSetDao.findAll();
-            
-            //TODO перенести в метод, создать запрос для TrainSetDao SQL_FIND_BY_TRAIN_NAME, и использовав его реализовать логику без циклов
-            int counts = 0;
-            if (!trainSets.isEmpty()) {
-                for (TrainSet trainSet : trainSets) {
-                    if (!trainSet.getName().equals(train.getName())) {
-                        if (counts == train.getCount_wagon()) {
-                            break;
-                        }
-                        for (int i = 1; i <= train.getCount_wagon(); i++) {
-                            trainSetDao.insert(new TrainSet(train.getName(), i));
-                            counts++;
-                        }
-                    }
-                }
-            } else {
-
-                for (int i = 1; i <= train.getCount_wagon(); i++) {
-                    trainSetDao.insert(new TrainSet(train.getName(), i));
-                }
-            }
+            createTrainSetPosition(train);
+//            //TODO перенести в метод, создать запрос для TrainSetDao SQL_FIND_BY_TRAIN_NAME, и использовав его реализовать логику без циклов
+//            int counts = 0;
+//            if (!trainSets.isEmpty()) {
+//                for (TrainSet trainSet : trainSets) {
+//                    if (!trainSet.getName().equals(train.getName())) {
+//                        if (counts == train.getCount_wagon()) {
+//                            break;
+//                        }
+//                        for (int i = 1; i <= train.getCount_wagon(); i++) {
+//                            trainSetDao.insert(new TrainSet(train.getName(), i));
+//                            counts++;
+//                        }
+//                    }
+//                }
+//            } else {
+//
+//                for (int i = 1; i <= train.getCount_wagon(); i++) {
+//                    trainSetDao.insert(new TrainSet(train.getName(), i));
+//                }
+//            }
 
 
         } catch (SQLException exc) {

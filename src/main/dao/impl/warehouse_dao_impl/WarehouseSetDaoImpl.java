@@ -13,8 +13,6 @@ import java.util.List;
 
 public class WarehouseSetDaoImpl implements WarehouseSetDao {
 
-    private static int number = 0;
-
     private DataSource dataSource;
 
     public WarehouseSetDaoImpl(DataSource dataSource) {
@@ -35,6 +33,7 @@ public class WarehouseSetDaoImpl implements WarehouseSetDao {
                 warehouseSet.setNameWarehouse(resultSet.getString(WarehouseSet.NAME_COLUMN));
                 warehouseSet.setIdWagon(resultSet.getLong(WarehouseSet.ID_WAGON_COLUMN));
                 warehouseSet.setIdWarehouse(resultSet.getLong(WarehouseSet.ID_WAREHOUES_COLUMN));
+                warehouseSet.setPosition(resultSet.getInt(WarehouseSet.POSITION_COLUMN));
                 warehouseSets.add(warehouseSet);
             }
         } catch (SQLException exc) {
@@ -173,82 +172,51 @@ public class WarehouseSetDaoImpl implements WarehouseSetDao {
         }
     }
 
-    private static void numbering(int maxPosition) {
-        number++;
-        if (number == maxPosition) {
-            number = 0;
-        }
-    }
-
-    private boolean isSameWarehouse(WarehouseSet warehouseSet, Wagon wagon) {
-        return warehouseSet.getNameWarehouse().equals(wagon.getNameWarehouse());
-    }
 
     private boolean isEmptyWarehouseName(Wagon wagon) {
         return wagon.getNameWarehouse() == null;
     }
 
-    private boolean isEmptyPosition(WarehouseSet warehouseSet) {
-        return warehouseSet.getIdWagon() == 0;
+    private boolean samePosition(WarehouseSet warehouseSet, int position) {
+        return warehouseSet.getPosition() == position;
     }
 
-    private boolean isWagonNull(Wagon wagon) {
-        try {
 
-        } catch (NullPointerException exc) {
-            System.out.println(exc);
-        }
-        return wagon == null;
-    }
-
-    private boolean isWarehouseSetNull(WarehouseSet warehouseSet) {
-        try {
-
-        } catch (NullPointerException exc) {
-            System.out.println(exc);
-        }
-        return warehouseSet == null;
-    }
     @Override
-    public void addWagon( WarehouseSet warehouseSet, Wagon wagon, int position) {
+    public void addWagon( String warehouseName, Wagon wagon, int position) {
 
         Connection connection = null;
-
-        if (isWagonNull(wagon)) {
-            System.out.println("wagon does not exist");
-        }
-
-        if (isWarehouseSetNull(warehouseSet)) {
-            System.out.println("warehouse does not exist");
-        }
 
         WarehouseSetDaoImpl warehouseSetDao = new WarehouseSetDaoImpl(dataSource);
         List<WarehouseSet> wSetsDao = warehouseSetDao.findAll();
 
-        numbering(wSetsDao.size());
         Long idWagon = -1l;
-        try {
-            idWagon = wagon.getIdWagon();
-            warehouseSet.setIdWagon(idWagon);
-        } catch (NullPointerException exc) {
-            System.out.println(exc);
-        }
-        wSetsDao.add(position, warehouseSet);
+        int numberOfPosition = 0;
 
-        if (isSameWarehouse(warehouseSet, wagon)
-                || isEmptyWarehouseName(wagon)
-                && isEmptyPosition(wSetsDao.get(position-1))) {
+        WarehouseSet wSet = new WarehouseSet();
+
+        for (WarehouseSet warehouseSet : wSetsDao) {
+
+            if (warehouseSet.getNameWarehouse().equals(warehouseName) && samePosition(warehouseSet, position) && warehouseSet.getIdWagon() == 0 ) {
+                idWagon = wagon.getIdWagon();
+                numberOfPosition = position;
+                wSet = warehouseSet;
+                wSet.setIdWagon(idWagon);
+                break;
+            }
+        }
+
+        if (isEmptyWarehouseName(wagon) && wSet.getId() != null) {
             try {
                 connection = dataSource.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(SQL_ADD_WAGON);
                 preparedStatement.setLong(1, idWagon);
-                preparedStatement.setString(2, warehouseSet.getNameWarehouse());
-                preparedStatement.setLong(3, position);
+                preparedStatement.setString(2, wSet.getNameWarehouse());
+                preparedStatement.setLong(3, numberOfPosition);
                 preparedStatement.execute();
 
                 WagonDaoImpl wagonDao = new WagonDaoImpl(dataSource);
-                warehouseSet.setIdWagon(idWagon);
-                wagonDao.updateWarehouseSet(warehouseSet, wSetsDao.get(position-1).getId());
+                wagonDao.updateWarehouseSet(wSet, wSet.getId());
 
             } catch (SQLException exc) {
                 System.out.println(exc);

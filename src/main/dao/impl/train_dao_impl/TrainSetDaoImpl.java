@@ -1,10 +1,13 @@
 package main.dao.impl.train_dao_impl;
 
 import main.DataSource;
+import main.dao.impl.WagonDaoImpl;
+import main.dao.impl.warehouse_dao_impl.WarehouseSetDaoImpl;
 import main.dao.train_dao.TrainSetDao;
 import main.model.train.Train;
 import main.model.train.TrainSet;
 import main.model.Wagon;
+import main.model.warehouse.WarehouseSet;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -19,31 +22,69 @@ public class TrainSetDaoImpl implements TrainSetDao {
         this.dataSource = dataSource;
     }
 
+    private boolean isSameTrain(TrainSet trainSet, Wagon wagon) {
+        System.out.println("trainSetName = " + trainSet.getName()
+        + " wagonTrainName = " + wagon.getTrainName());
+        return trainSet.getName().equals(wagon.getTrainName());
+    }
+
+    private boolean isEmptyTrainName(Wagon wagon) {
+        System.out.println(wagon.getTrainName());
+        return wagon.getTrainName() == null;
+    }
+
+    private boolean isSamePosition(TrainSet trainSet, int posWagon) {
+        System.out.println("trainSet pos = " + trainSet.getPosWagon()
+        + " posWagon = " + posWagon);
+        return trainSet.getPosWagon() == posWagon;
+    }
+
+    private boolean samePosition(TrainSet trainSet, int position) {
+        return trainSet.getPosWagon() == position;
+    }
+
+    private boolean isEmptyWarehouseName(Wagon wagon) {
+        return wagon.getNameWarehouse() == null;
+    }
+
     @Override
-    public boolean addWagon(TrainSet trainSet, Wagon wagon) {
+    public boolean addWagon(String trainName, Wagon wagon, int position) {
         Connection connection = null;
 
         assert wagon != null;
-        if (trainSet.getName().equals(wagon.getTrainName()) || wagon.getTrainName() == null && wagon.getPosTrain() == 0) {
-            wagon.setTrainName(trainSet.getName());
-            wagon.setPosTrain(trainSet.getPosWagon());
-            trainSet.setIdWagon(wagon.getIdWagon());
+
+
+        TrainSetDaoImpl trainSetDao = new TrainSetDaoImpl(dataSource);
+        List<TrainSet> tSetsDao = trainSetDao.findAll();
+
+        Long idWagon = -1l;
+        int numberOfPosition = 0;
+
+        TrainSet tSet = new TrainSet();
+
+        for (TrainSet trainSet : tSetsDao) {
+
+            if (trainSet.getName().equals(trainName) && samePosition(trainSet, position) && trainSet.getIdWagon() == 0 ) {
+                idWagon = wagon.getIdWagon();
+                tSet.setPosWagon(position);
+                tSet = trainSet;
+                tSet.setIdWagon(idWagon);
+                break;
+            }
+        }
+
+        if (isEmptyWarehouseName(wagon) && tSet.getId() != null) {
             try {
                 connection = dataSource.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(SQL_ADD_WAGON);
-                preparedStatement.setLong(1, trainSet.getIdWagon());
-                preparedStatement.setString(2, trainSet.getName());
-                preparedStatement.setInt(3, trainSet.getPosWagon());
+                preparedStatement.setLong(1, idWagon);
+                preparedStatement.setString(2, tSet.getName());
+                preparedStatement.setInt(3, tSet.getPosWagon());
                 preparedStatement.execute();
 
-                String SQL_UPDATE_TRAIN_NAME_AND_POS = "UPDATE " + Wagon.TABLE_NAME + " SET "
-                        + Wagon.TRAIN_NAME_COLUMN + " = ?, " + Wagon.POSITION_TRAIN_COLUMN + " = ? WHERE "
-                        + Wagon.ID_WAGON_COLUMN + " = ?";
-                PreparedStatement preparedStatementWagon = connection.prepareStatement(SQL_UPDATE_TRAIN_NAME_AND_POS);
-                preparedStatementWagon.setString(1, wagon.getTrainName());
-                preparedStatementWagon.setInt(2, trainSet.getPosWagon());
-                preparedStatementWagon.setLong(3, trainSet.getIdWagon());
-                preparedStatementWagon.execute();
+                WagonDaoImpl wagonDao = new WagonDaoImpl(dataSource);
+                wagonDao.updateTrainSet(tSet, tSet.getId());
+
             } catch (SQLException exc) {
                 System.out.println(exc);
             } finally {
@@ -121,6 +162,35 @@ public class TrainSetDaoImpl implements TrainSetDao {
     }
 
     @Override
+    public TrainSet findByName(String name) {
+        Connection connection = null;
+        TrainSet trainSet = null;
+        try {
+            connection = dataSource.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_BY_NAME);
+            preparedStatement.setString(1, name);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                trainSet = new TrainSet();
+                trainSet.setId(rs.getLong(TrainSet.ID_COLUMN));
+                trainSet.setName(rs.getString(TrainSet.NAME_COLUMN));
+                trainSet.setIdWagon(rs.getLong(TrainSet.ID_WAGON_COLUMN));
+                trainSet.setIdTrain(rs.getLong(TrainSet.ID_TRAIN_COLUMN));
+                trainSet.setPosWagon(rs.getInt(TrainSet.POS_WAGON_COLUMN));
+            }
+        } catch (SQLException exc) {
+            System.out.println(exc);
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException exc) {
+                System.out.println(exc);
+            }
+        }
+        return trainSet;
+    }
+
+    @Override
     public void delete(TrainSet trainSet) {
         Connection connection = null;
         try {
@@ -171,6 +241,7 @@ public class TrainSetDaoImpl implements TrainSetDao {
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, trainSet.getName());
             preparedStatement.setInt(2, trainSet.getPosWagon());
+            preparedStatement.setLong(3, trainSet.getIdTrain());
             preparedStatement.execute();
             ResultSet rs = preparedStatement.getGeneratedKeys();
             while (rs.next()) {
@@ -211,7 +282,6 @@ public class TrainSetDaoImpl implements TrainSetDao {
             }
         }
     }
-
 
     private void showError(String text) {
         System.out.println(text);

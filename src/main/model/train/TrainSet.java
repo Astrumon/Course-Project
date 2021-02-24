@@ -30,9 +30,10 @@ public class TrainSet {
 
     }
 
-    public TrainSet( String name, int posWagon) {
+    public TrainSet( String name, int posWagon, Long idTrain) {
         this.posWagon = posWagon;
         this.name = name;
+        this.idTrain = idTrain;
     }
 
     public int getPosWagon() {

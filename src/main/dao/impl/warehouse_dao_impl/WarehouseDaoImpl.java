@@ -2,9 +2,7 @@ package main.dao.impl.warehouse_dao_impl;
 
 import main.DataSource;
 import main.dao.warehouse_dao.WarehouseDao;
-import main.dao.warehouse_dao.WarehouseSetDao;
 import main.model.Wagon;
-import main.model.train.TrainSet;
 import main.model.warehouse.Warehouse;
 import main.model.warehouse.WarehouseSet;
 
@@ -147,7 +145,13 @@ public class WarehouseDaoImpl implements WarehouseDao {
                 System.out.println(exc);
             }
         }
+    }
 
+    private void createWarehousePositions(Warehouse warehouse) {
+        WarehouseSetDaoImpl warehouseSetDao = new WarehouseSetDaoImpl(dataSource);
+        for (int i = 1; i <= warehouse.getCapacity(); i++) {
+            warehouseSetDao.insert(new WarehouseSet(warehouse.getName(), i, warehouse.getId()));
+        }
     }
 
     @Override
@@ -156,36 +160,14 @@ public class WarehouseDaoImpl implements WarehouseDao {
         try {
             connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setString(1,  warehouse.getName());
+            preparedStatement.setString(1, warehouse.getName());
             preparedStatement.setInt(2, warehouse.getCapacity());
             preparedStatement.execute();
             ResultSet rs = preparedStatement.getGeneratedKeys();
             while (rs.next()) {
                 warehouse.setId(rs.getLong(1));
             }
-
-            WarehouseSetDaoImpl warehouseSetDao = new WarehouseSetDaoImpl(dataSource);
-            List<WarehouseSet> warehouseSets = warehouseSetDao.findAll();
-            int counts = 0;
-            if (!warehouseSets.isEmpty()) {
-                for (WarehouseSet warehouseSet : warehouseSets) {
-                    if (!warehouseSet.getNameWarehouse().equals(warehouse.getName())) {
-                        if (counts == warehouse.getCapacity()) {
-                            break;
-                        }
-                        for (int i = 1; i <= warehouse.getCapacity(); i++) {
-                            warehouseSetDao.insert(new WarehouseSet(warehouse.getName(), i, warehouse.getId()));
-                            counts++;
-                        }
-                    }
-                }
-            } else {
-
-                for (int i = 1; i <= warehouse.getCapacity(); i++) {
-                    warehouseSetDao.insert(new WarehouseSet(warehouse.getName(), i, warehouse.getId()));
-                }
-            }
-
+            createWarehousePositions(warehouse);
         } catch (SQLException exc) {
             System.out.println(exc);
         } finally {

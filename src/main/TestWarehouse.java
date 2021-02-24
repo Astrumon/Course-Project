@@ -5,6 +5,7 @@ import main.dao.impl.warehouse_dao_impl.WarehouseDaoImpl;
 import main.dao.impl.warehouse_dao_impl.WarehouseSetDaoImpl;
 import main.dao.warehouse_dao.WarehouseDao;
 import main.model.Wagon;
+import main.model.train.TrainSet;
 import main.model.warehouse.Warehouse;
 import main.model.warehouse.WarehouseSet;
 import org.sqlite.SQLiteConfig;
@@ -22,8 +23,10 @@ public class TestWarehouse {
 
 
         WarehouseDaoImpl warehouseDao = new WarehouseDaoImpl(dataSource );
-        warehouseDao.deleteByName(new Warehouse("warehouse#2", 2));
-        //warehouseDao.insert(new Warehouse("warehouse#2", 2));
+       // warehouseDao.deleteByName(new Warehouse("warehouse#2", 2));
+        warehouseDao.insert(new Warehouse("warehouse#2", 2));
+        warehouseDao.insert(new Warehouse("warehouse#2", 5));
+        warehouseDao.insert(new Warehouse("warehouse#1", 3));
         showWarehouse(warehouseDao.findAll());
 
         WarehouseSetDaoImpl warehouseSetDao = new WarehouseSetDaoImpl(dataSource);
@@ -31,20 +34,21 @@ public class TestWarehouse {
 
         Wagon wagon = new Wagon();
         wagon.setType(1);
-        wagon.setIdWagon(3l);
+        wagon.setIdWagon(4l);
 
         wagon.setSeatingCount(100);
 
         Wagon wagon1 = new Wagon();
         wagon1.setType(1);
-        wagon1.setIdWagon(5l);
+        wagon1.setIdWagon(15l);
         wagon1.setSeatingCount(200);
 
         WagonDaoImpl wagonDao =  new WagonDaoImpl(dataSource);
-       // wagonDao.insert(wagon);
-        //wagonDao.insert(wagon1);
-       //warehouseSetDao.addWagon(warehouseSetDao.findByName("warehouse#2"), wagon, 1);
-       // warehouseSetDao.addWagon(warehouseSetDao.findByName("warehouse#2"), wagon1, 2);
+        wagonDao.insert(wagon);
+        wagonDao.insert(wagon1);
+
+       warehouseSetDao.addWagon("warehouse#1", wagon, 3);
+        warehouseSetDao.addWagon("warehouse#2", wagon1, 2);
         System.out.println();
        // warehouseSetDao.deleteByWarehouseName(new Warehouse("warehouse#2",2));
         showWarehouseSet(warehouseSetDao.findAll());
