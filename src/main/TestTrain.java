@@ -27,9 +27,9 @@ public class TestTrain {
         train1.setCount_wagon(5);
 
         TrainDaoImpl trainDao = new TrainDaoImpl(dataSource);
-        trainDao.insert(train1);
-        trainDao.insert(train);
-        //trainDao.deleteByName(train1);
+       // trainDao.insert(train1);
+       // trainDao.insert(train);
+        trainDao.deleteByName(train1);
         // trainSetDao.deleteByTrainName(train1);
         showAllTrain(trainDao.findAll());
 
@@ -48,12 +48,12 @@ public class TestTrain {
 
 
         WagonDaoImpl wagonDao = new WagonDaoImpl(dataSource);
-        wagonDao.insert(wagon);
-        wagonDao.insert(wagon1);
+       // wagonDao.insert(wagon);
+       // wagonDao.insert(wagon1);
 
 
-        trainSetDao.addWagon("train#4", wagon,1);
-        trainSetDao.addWagon("train#2", wagon1, 1);
+      //  trainSetDao.addWagon("train#4", wagon,1);
+       // trainSetDao.addWagon("train#2", wagon1, 1);
         showAllTrainSet(trainSetDao.findAll());
 
     }
