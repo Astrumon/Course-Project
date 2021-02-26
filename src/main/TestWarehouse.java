@@ -1,15 +1,11 @@
 package main;
 
-import main.dao.impl.WagonDaoImpl;
+import main.dao.impl.wagon_dao_impl.WagonDaoImpl;
 import main.dao.impl.warehouse_dao_impl.WarehouseDaoImpl;
 import main.dao.impl.warehouse_dao_impl.WarehouseSetDaoImpl;
-import main.dao.warehouse_dao.WarehouseDao;
-import main.model.Wagon;
-import main.model.train.TrainSet;
+import main.model.wagon.Wagon;
 import main.model.warehouse.Warehouse;
 import main.model.warehouse.WarehouseSet;
-import org.sqlite.SQLiteConfig;
-import org.sqlite.javax.SQLiteConnectionPoolDataSource;
 
 import java.util.List;
 

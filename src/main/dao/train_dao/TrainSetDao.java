@@ -2,7 +2,7 @@ package main.dao.train_dao;
 
 import main.model.train.Train;
 import main.model.train.TrainSet;
-import main.model.Wagon;
+import main.model.wagon.Wagon;
 
 
 import java.util.List;

@@ -1,10 +1,5 @@
 package main.model.warehouse;
 
-import main.model.Wagon;
-
-import java.util.HashSet;
-import java.util.Set;
-
 public class Warehouse {
     public static final String TABLE_NAME = "warehouse";
     public static final String ID_COLUMN = "id";

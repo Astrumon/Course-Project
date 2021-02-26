@@ -1,10 +1,9 @@
 package main;
 
-import main.dao.WagonDao;
-import main.dao.impl.WagonDaoImpl;
+import main.dao.impl.wagon_dao_impl.WagonDaoImpl;
 import main.dao.impl.train_dao_impl.TrainDaoImpl;
 import main.dao.impl.train_dao_impl.TrainSetDaoImpl;
-import main.model.Wagon;
+import main.model.wagon.Wagon;
 import main.model.train.Train;
 import main.model.train.TrainSet;
 
@@ -29,7 +28,7 @@ public class TestTrain {
         TrainDaoImpl trainDao = new TrainDaoImpl(dataSource);
        // trainDao.insert(train1);
        // trainDao.insert(train);
-        trainDao.deleteByName(train1);
+        trainDao.deleteByName(train);
         // trainSetDao.deleteByTrainName(train1);
         showAllTrain(trainDao.findAll());
 

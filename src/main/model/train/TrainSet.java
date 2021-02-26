@@ -1,6 +1,6 @@
 package main.model.train;
 
-import main.model.Wagon;
+import main.model.wagon.Wagon;
 
 import java.util.ArrayList;
 import java.util.List;

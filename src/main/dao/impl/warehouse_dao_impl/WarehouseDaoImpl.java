@@ -2,7 +2,7 @@ package main.dao.impl.warehouse_dao_impl;
 
 import main.DataSource;
 import main.dao.warehouse_dao.WarehouseDao;
-import main.model.Wagon;
+import main.model.wagon.Wagon;
 import main.model.warehouse.Warehouse;
 import main.model.warehouse.WarehouseSet;
 
@@ -188,8 +188,6 @@ public class WarehouseDaoImpl implements WarehouseDao {
             preparedStatement.setString(1, warehouse.getName());
             preparedStatement.execute();
 
-            //deleteWarehouseSet(warehouse);
-
         } catch (SQLException exc) {
             System.out.println(exc);
         } finally {
@@ -201,8 +199,5 @@ public class WarehouseDaoImpl implements WarehouseDao {
         }
     }
 
-    private void deleteWarehouseSet(Warehouse warehouse) {
-        WarehouseSetDaoImpl warehouseSetDao = new WarehouseSetDaoImpl(dataSource);
-        warehouseSetDao.deleteByWarehouseName(warehouse);
-    }
+
 }

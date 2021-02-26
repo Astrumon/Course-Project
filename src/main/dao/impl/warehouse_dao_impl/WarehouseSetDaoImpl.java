@@ -1,9 +1,9 @@
 package main.dao.impl.warehouse_dao_impl;
 
 import main.DataSource;
-import main.dao.impl.WagonDaoImpl;
+import main.dao.impl.wagon_dao_impl.WagonDaoImpl;
 import main.dao.warehouse_dao.WarehouseSetDao;
-import main.model.Wagon;
+import main.model.wagon.Wagon;
 import main.model.warehouse.Warehouse;
 import main.model.warehouse.WarehouseSet;
 

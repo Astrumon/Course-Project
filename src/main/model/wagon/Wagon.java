@@ -1,4 +1,4 @@
-package main.model;
+package main.model.wagon;
 
 public class Wagon {
     public static final String TABLE_NAME = "wagon";
@@ -11,6 +11,7 @@ public class Wagon {
     public static final String TRAIN_NAME_COLUMN = "train_name";
     public static final String ID_TRAIN_SET_COLUMN = "id_train_set";
     public static final String ID_WAREHOUSE_SET_COLUMN = "id_warehouse_set";
+    public static final String ID_COUNT_TYPE_PLACE_COLUMN = "id_count_type_place";
 
     public static final int PASSENGER_TYPE = 1;
     public static final int CARGO_TYPE = 2;
@@ -21,6 +22,15 @@ public class Wagon {
     private Long idWagon;
     private String nameWarehouse;
     private int posTrain, type;
+    private Long idCountTypePlace;
+
+    public Long getIdCountTypePlace() {
+        return idCountTypePlace;
+    }
+
+    public void setIdCountTypePlace(Long idCountTypePlace) {
+        this.idCountTypePlace = idCountTypePlace;
+    }
 
     public Long getIdTrainSet() {
         return idTrainSet;
@@ -50,7 +60,12 @@ public class Wagon {
         this.trainName = trainName;
 
         checkType(type);
+    }
 
+    public Wagon(int seatingCount, Long idWagon, String trainName, String nameWarehouse,
+                 int posTrain, int type, Long idCountTypePlace) {
+        this(seatingCount, idWagon, trainName, nameWarehouse, posTrain, type);
+        this.idCountTypePlace = idCountTypePlace;
     }
 
     public int getType() {
@@ -137,6 +152,7 @@ public class Wagon {
                 + ", type= " + defineType(this.type)
                 + ", idTrainSet = " + this.idTrainSet
                 + ", idWarehouseSet = " + this.idWarehouseSet
+                + ", idCountTypePlace = " + this.idCountTypePlace
                 +"]";
     }
 }

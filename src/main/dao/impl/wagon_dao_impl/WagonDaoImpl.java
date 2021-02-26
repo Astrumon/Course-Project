@@ -1,9 +1,8 @@
-package main.dao.impl;
+package main.dao.impl.wagon_dao_impl;
 
 import main.DataSource;
-import main.dao.WagonDao;
-import main.dao.warehouse_dao.WarehouseSetDao;
-import main.model.Wagon;
+import main.dao.wagon_dao.WagonDao;
+import main.model.wagon.Wagon;
 import main.model.train.TrainSet;
 import main.model.warehouse.WarehouseSet;
 
@@ -39,6 +38,7 @@ public class WagonDaoImpl implements WagonDao {
                 wagon.setType(rs.getInt(Wagon.TYPE_COLUMN));
                 wagon.setIdTrainSet(rs.getLong(Wagon.ID_TRAIN_SET_COLUMN));
                 wagon.setIdWarehouseSet(rs.getLong(Wagon.ID_WAREHOUSE_SET_COLUMN));
+                wagon.setIdCountTypePlace(rs.getLong(Wagon.ID_COUNT_TYPE_PLACE_COLUMN));
                 wagons.add(wagon);
             }
         } catch (SQLException exc) {
@@ -72,6 +72,7 @@ public class WagonDaoImpl implements WagonDao {
                 wagon.setPosTrain(rs.getInt(Wagon.POSITION_TRAIN_COLUMN));
                 wagon.setIdTrainSet(rs.getLong(Wagon.ID_TRAIN_SET_COLUMN));
                 wagon.setIdWarehouseSet(rs.getLong(Wagon.ID_WAREHOUSE_SET_COLUMN));
+                wagon.setIdCountTypePlace(rs.getLong(Wagon.ID_COUNT_TYPE_PLACE_COLUMN));
                 wagon.setType(rs.getInt(Wagon.TYPE_COLUMN));
             }
         } catch (SQLException exc) {
@@ -105,6 +106,7 @@ public class WagonDaoImpl implements WagonDao {
                 wagon.setPosTrain(rs.getInt(Wagon.POSITION_TRAIN_COLUMN));
                 wagon.setIdTrainSet(rs.getLong(Wagon.ID_TRAIN_SET_COLUMN));
                 wagon.setIdWarehouseSet(rs.getLong(Wagon.ID_WAREHOUSE_SET_COLUMN));
+                wagon.setIdCountTypePlace(rs.getLong(Wagon.ID_COUNT_TYPE_PLACE_COLUMN));
                 wagon.setType(rs.getInt(Wagon.TYPE_COLUMN));
             }
         } catch (SQLException exc) {
@@ -174,9 +176,6 @@ public class WagonDaoImpl implements WagonDao {
             preparedStatement.setLong(1, wagon.getId());
             preparedStatement.execute();
 
-//            preparedStatement = connection.prepareStatement("DELETE FROM "+ Warehouse.TABLE_NAME+ " WHERE " + Warehouse.WAGON_COLUMN + " = ?");
-//            preparedStatement.setLong(1, wagon.getId());
-//            preparedStatement.execute();
         } catch (SQLException exc) {
             System.out.println(exc);
         } finally {
@@ -199,6 +198,7 @@ public class WagonDaoImpl implements WagonDao {
             preparedStatement.setLong(2, wagon.getIdWagon());
             preparedStatement.setInt(3, wagon.getType());
             preparedStatement.setInt(4, wagon.getPosTrain());
+            preparedStatement.setLong(5, wagon.getIdCountTypePlace());
             preparedStatement.execute();
             ResultSet rs = preparedStatement.getGeneratedKeys();
             while (rs.next()) {
@@ -231,6 +231,7 @@ public class WagonDaoImpl implements WagonDao {
             preparedStatement.setLong(6, wagon.getIdTrainSet());
             preparedStatement.setLong(7, wagon.getIdWarehouseSet());
             preparedStatement.setLong(8, wagon.getId());
+            preparedStatement.setLong(9, wagon.getIdCountTypePlace());
             preparedStatement.execute();
 
         } catch (SQLException exc) {
@@ -244,4 +245,6 @@ public class WagonDaoImpl implements WagonDao {
         }
 
     }
+
+
 }

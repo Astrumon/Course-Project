@@ -9,15 +9,27 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Класс TrainDaoImpl служит для создания позиций в поезде
+ * взаимодействует с таблицами train, train_set.
+ *
+ */
 public class TrainDaoImpl implements TrainDao {
     private DataSource dataSource;
 
-
+    /**
+     * Конструктор служит для установки подключения к базе данных
+     * @param dataSource
+     */
     public TrainDaoImpl(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
 
+    /**
+     * Выборка всей информации из таблицы train
+     * @return
+     */
     @Override
     public List<Train> findAll() {
         Connection connection = null;
@@ -48,6 +60,11 @@ public class TrainDaoImpl implements TrainDao {
         return trains;
     }
 
+    /**
+     * Выборка всей информации одной записи по заданому id из таблицы train
+     * @param id
+     * @return
+     */
     @Override
     public Train findById(Long id) {
         Connection connection = null;
@@ -75,6 +92,10 @@ public class TrainDaoImpl implements TrainDao {
         return train;
     }
 
+    /**
+     * Удаление записи с таблицы train по train.id
+     * @param train
+     */
     @Override
     public void delete(Train train) {
         Connection connection = null;
@@ -95,6 +116,10 @@ public class TrainDaoImpl implements TrainDao {
         }
     }
 
+    /**
+     * Удаление записи с таблицы train по train.name
+     * @param train
+     */
     @Override
     public void deleteByName(Train train) {
         Connection connection = null;
@@ -103,8 +128,6 @@ public class TrainDaoImpl implements TrainDao {
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_BY_NAME);
             preparedStatement.setString(1, train.getName());
             preparedStatement.execute();
-
-            deleteTrainSet(train);
 
         } catch (SQLException exc) {
             System.out.println(exc);
@@ -118,12 +141,22 @@ public class TrainDaoImpl implements TrainDao {
     }
 
 
+    /**
+     * Создания в таблице train_set записей с информацией про состав заданого поезда
+     * @param train
+     */
     private void createTrainSetPosition(Train train) {
         TrainSetDaoImpl trainSetDao = new TrainSetDaoImpl(dataSource);
         for (int i = 1; i <= train.getCount_wagon(); i++) {
             trainSetDao.insert(new TrainSet(train.getName(), i, train.getId()));
         }
     }
+
+    /**
+     * Вставка записи информации про поезд в таблицу train.
+     * вызов функции createTrainSetPosition(Train train)
+     * @param train
+     */
     @Override
     public void insert(Train train) {
         Connection connection = null;
@@ -143,28 +176,6 @@ public class TrainDaoImpl implements TrainDao {
             }
 
             createTrainSetPosition(train);
-//            //TODO перенести в метод, создать запрос для TrainSetDao SQL_FIND_BY_TRAIN_NAME, и использовав его реализовать логику без циклов
-//            int counts = 0;
-//            if (!trainSets.isEmpty()) {
-//                for (TrainSet trainSet : trainSets) {
-//                    if (!trainSet.getName().equals(train.getName())) {
-//                        if (counts == train.getCount_wagon()) {
-//                            break;
-//                        }
-//                        for (int i = 1; i <= train.getCount_wagon(); i++) {
-//                            trainSetDao.insert(new TrainSet(train.getName(), i));
-//                            counts++;
-//                        }
-//                    }
-//                }
-//            } else {
-//
-//                for (int i = 1; i <= train.getCount_wagon(); i++) {
-//                    trainSetDao.insert(new TrainSet(train.getName(), i));
-//                }
-//            }
-
-
         } catch (SQLException exc) {
             System.out.println(exc);
         } finally {
@@ -176,11 +187,10 @@ public class TrainDaoImpl implements TrainDao {
         }
     }
 
-    private void deleteTrainSet(Train train) {
-        TrainSetDaoImpl trainSetDao = new TrainSetDaoImpl(dataSource);
-        trainSetDao.deleteByTrainName(train);
-    }
-
+    /**
+     * Обновляет запись в таблице train информацией об объекте train
+     * @param train
+     */
     @Override
     public void update(Train train) {
         Connection connection = null;

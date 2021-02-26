@@ -1,10 +1,10 @@
 import main.DataSource;
 import main.dao.impl.train_dao_impl.TrainDaoImpl;
 import main.dao.impl.train_dao_impl.TrainSetDaoImpl;
-import main.dao.impl.WagonDaoImpl;
+import main.dao.impl.wagon_dao_impl.WagonDaoImpl;
 import main.model.train.Train;
 import main.model.train.TrainSet;
-import main.model.Wagon;
+import main.model.wagon.Wagon;
 import main.model.warehouse.Warehouse;
 
 import java.sql.SQLException;

@@ -1,70 +1,74 @@
 package main.dao.impl.train_dao_impl;
 
 import main.DataSource;
-import main.dao.impl.WagonDaoImpl;
-import main.dao.impl.warehouse_dao_impl.WarehouseSetDaoImpl;
+import main.dao.impl.wagon_dao_impl.WagonDaoImpl;
 import main.dao.train_dao.TrainSetDao;
+import main.model.wagon.Wagon;
 import main.model.train.Train;
 import main.model.train.TrainSet;
-import main.model.Wagon;
-import main.model.warehouse.WarehouseSet;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Класс TrainSetDaoImpl служит для создания состава определенного поезда
+ * Взаимодействует с таблицами train, train_set, wagon
+ */
 public class TrainSetDaoImpl implements TrainSetDao {
 
     private DataSource dataSource;
 
-
+    /**
+     * Конструктор для подключения к базе данных
+     * @param dataSource
+     */
     public TrainSetDaoImpl(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
-    private boolean isSameTrain(TrainSet trainSet, Wagon wagon) {
-        System.out.println("trainSetName = " + trainSet.getName()
-        + " wagonTrainName = " + wagon.getTrainName());
-        return trainSet.getName().equals(wagon.getTrainName());
-    }
 
-    private boolean isEmptyTrainName(Wagon wagon) {
-        System.out.println(wagon.getTrainName());
-        return wagon.getTrainName() == null;
-    }
-
-    private boolean isSamePosition(TrainSet trainSet, int posWagon) {
-        System.out.println("trainSet pos = " + trainSet.getPosWagon()
-        + " posWagon = " + posWagon);
-        return trainSet.getPosWagon() == posWagon;
-    }
-
+    /**
+     * Метод для проверки позиции вагона в поезде
+     * @param trainSet
+     * @param position
+     * @return
+     */
     private boolean samePosition(TrainSet trainSet, int position) {
         return trainSet.getPosWagon() == position;
     }
 
-    private boolean isEmptyWarehouseName(Wagon wagon) {
-        return wagon.getNameWarehouse() == null;
+    /**
+     * Метод для проверки имени поезда у вагона
+     * @param wagon
+     * @return
+     */
+    private boolean isEmptyTrainName(Wagon wagon) {
+        return wagon.getTrainName() == null;
     }
 
+    /**
+     * Метод который служит для добавления информации о вагоне в таблицу train_set
+     * Информация о поезде так же записывается в таблицу wagon
+     * @param trainName
+     * @param wagon
+     * @param position
+     * @return
+     */
     @Override
     public boolean addWagon(String trainName, Wagon wagon, int position) {
         Connection connection = null;
-
         assert wagon != null;
-
 
         TrainSetDaoImpl trainSetDao = new TrainSetDaoImpl(dataSource);
         List<TrainSet> tSetsDao = trainSetDao.findAll();
 
         Long idWagon = -1l;
-        int numberOfPosition = 0;
-
         TrainSet tSet = new TrainSet();
 
         for (TrainSet trainSet : tSetsDao) {
 
-            if (trainSet.getName().equals(trainName) && samePosition(trainSet, position) && trainSet.getIdWagon() == 0 ) {
+            if (trainSet.getName().equals(trainName) && samePosition(trainSet, position) && trainSet.getIdWagon() == 0) {
                 idWagon = wagon.getIdWagon();
                 tSet.setPosWagon(position);
                 tSet = trainSet;
@@ -73,7 +77,7 @@ public class TrainSetDaoImpl implements TrainSetDao {
             }
         }
 
-        if (isEmptyWarehouseName(wagon) && tSet.getId() != null) {
+        if (isEmptyTrainName(wagon) && tSet.getId() != null) {
             try {
                 connection = dataSource.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(SQL_ADD_WAGON);
@@ -101,6 +105,10 @@ public class TrainSetDaoImpl implements TrainSetDao {
     }
 
 
+    /**
+     * Выборка всей информации из таблицы train_set
+     * @return
+     */
     @Override
     public List<TrainSet> findAll() {
         Connection connection = null;
@@ -133,6 +141,11 @@ public class TrainSetDaoImpl implements TrainSetDao {
         return trainSets;
     }
 
+    /**
+     * Выборка всей информации одной записи по заданому id из таблицы train_set
+     * @param id
+     * @return
+     */
     @Override
     public TrainSet findById(Long id) {
         Connection connection = null;
@@ -161,6 +174,11 @@ public class TrainSetDaoImpl implements TrainSetDao {
         return trainSet;
     }
 
+    /**
+     * Выборка всей информации одной записи по заданому имени поезда из таблицы train_set
+     * @param name
+     * @return
+     */
     @Override
     public TrainSet findByName(String name) {
         Connection connection = null;
@@ -190,6 +208,10 @@ public class TrainSetDaoImpl implements TrainSetDao {
         return trainSet;
     }
 
+    /**
+     * Удаление записи с таблицы train_set по train_set.id
+     * @param trainSet
+     */
     @Override
     public void delete(TrainSet trainSet) {
         Connection connection = null;
@@ -212,6 +234,10 @@ public class TrainSetDaoImpl implements TrainSetDao {
 
     }
 
+    /**
+     * Удаление записи с таблицы train_set по train.name
+     * @param train
+     */
     @Override
     public void deleteByTrainName(Train train) {
         Connection connection = null;
@@ -232,6 +258,10 @@ public class TrainSetDaoImpl implements TrainSetDao {
         }
     }
 
+    /**
+     * Вставка записи информации про поезд в таблицу train_set.
+     * @param trainSet
+     */
     @Override
     public void insert(TrainSet trainSet) {
         Connection connection = null;
@@ -259,6 +289,10 @@ public class TrainSetDaoImpl implements TrainSetDao {
         }
     }
 
+    /**
+     * Обновляет запись в таблице train информацией об объекте trainSet
+     * @param trainSet
+     */
     @Override
     public void update(TrainSet trainSet) {
         Connection connection = null;
@@ -281,9 +315,5 @@ public class TrainSetDaoImpl implements TrainSetDao {
                 System.out.println(exc);
             }
         }
-    }
-
-    private void showError(String text) {
-        System.out.println(text);
     }
 }
