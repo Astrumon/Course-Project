@@ -35,7 +35,7 @@ public class Main {
         tr.setName(null);
 
 
-        Wagon wagon = new Wagon( 5, 2l, null, "#1", 0, 1);
+        Wagon wagon = new Wagon( 2l, null, "#1", 0, 1);
         WagonDaoImpl wagonDao = new WagonDaoImpl(dataSource);
         //wagonDao.insert(wagon);
         showAllWagons(wagonDao.findAll());

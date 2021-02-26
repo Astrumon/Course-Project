@@ -7,12 +7,21 @@ public class Place {
     public static final String NUMBER_COLUMN = "number";
     public static final String TYPE_COLUMN = "type";
     public static final String STATUS_COLUMN = "status";
+    public static final String ID_COUNT_TYPE_COLUMN = "id_count_type";
 
-    private Long idPlace, idWagon;
+    private Long idPlace, idWagon, idCountType;
     private int number;
     private int type, status;
     public static final int TAKEN = 1;
     public static final int FREE = 0;
+
+    public Long getIdCountType() {
+        return idCountType;
+    }
+
+    public void setIdCountType(Long idCountType) {
+        this.idCountType = idCountType;
+    }
 
     public int getStatus() {
         return status;
@@ -70,6 +79,7 @@ public class Place {
                 + " idWagon = " + this.idWagon
                 + " number = " + this.number
                 + " type = " + this.type
+                + " idCountType = " + this.idCountType
                 + "]";
     }
 }

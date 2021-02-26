@@ -3,7 +3,7 @@ package main.model.wagon;
 public class TypePlace {
 
     public static final String TABLE_NAME = "count_type_place";
-    public static final String ID_TYPE_PLACE_COLUMN = "id_type_place";
+    public static final String ID_TYPE_PLACE_COLUMN = "id_count_type_place";
     public static final String ID_WAGON_COLUMN = "id_wagon";
     public static final String COUNT_VIP_COLUMN = "count_vip";
     public static final String COUNT_MIDDLE_COLUMN = "count_middle";
@@ -49,6 +49,10 @@ public class TypePlace {
             default:
                 return countSeats;
         }
+    }
+
+    public int getAllPlace() {
+        return this.countSeats + this.countLow + this.countMiddle + countVip;
     }
 
     public int getCountVip() {

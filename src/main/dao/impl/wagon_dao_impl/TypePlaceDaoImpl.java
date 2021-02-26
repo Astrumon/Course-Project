@@ -5,6 +5,7 @@ import main.dao.wagon_dao.TypePlaceDao;
 import main.model.wagon.TypePlace;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,7 +33,7 @@ public class TypePlaceDaoImpl implements TypePlaceDao {
     @Override
     public List<TypePlace> findAll() {
         Connection connection = null;
-        List<TypePlace> typePlaces = null;
+        List<TypePlace> typePlaces = new ArrayList<>();
 
         try {
             connection = dataSource.getConnection();
@@ -135,11 +136,10 @@ public class TypePlaceDaoImpl implements TypePlaceDao {
         try {
             connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setLong(1, typePlace.getIdWagon());
-            preparedStatement.setInt(2, typePlace.getCountVip());
-            preparedStatement.setInt(3, typePlace.getCountMiddle());
-            preparedStatement.setInt(4, typePlace.getCountLow());
-            preparedStatement.setInt(5, typePlace.getCountSeats());
+            preparedStatement.setInt(1, typePlace.getCountVip());
+            preparedStatement.setInt(2, typePlace.getCountMiddle());
+            preparedStatement.setInt(3, typePlace.getCountLow());
+            preparedStatement.setInt(4, typePlace.getCountSeats());
             preparedStatement.execute();
 
             ResultSet resultSet = preparedStatement.getGeneratedKeys();

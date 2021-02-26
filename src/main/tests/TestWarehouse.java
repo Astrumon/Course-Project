@@ -1,5 +1,6 @@
-package main;
+package main.tests;
 
+import main.DataSource;
 import main.dao.impl.wagon_dao_impl.WagonDaoImpl;
 import main.dao.impl.warehouse_dao_impl.WarehouseDaoImpl;
 import main.dao.impl.warehouse_dao_impl.WarehouseSetDaoImpl;
@@ -32,12 +33,12 @@ public class TestWarehouse {
         wagon.setType(1);
         wagon.setIdWagon(4l);
 
-        wagon.setSeatingCount(100);
+
 
         Wagon wagon1 = new Wagon();
         wagon1.setType(1);
         wagon1.setIdWagon(15l);
-        wagon1.setSeatingCount(200);
+
 
         WagonDaoImpl wagonDao =  new WagonDaoImpl(dataSource);
         wagonDao.insert(wagon);

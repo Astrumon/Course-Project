@@ -6,7 +6,6 @@ public class Wagon {
     public static final String ID_WAGON_COLUMN = "id_wagon";
     public static final String NAME_WAREHOUSE_COLUMN = "name_warehouse";
     public static final String POSITION_TRAIN_COLUMN = "pos_train";
-    public static final String SEATING_CAPACITY_COLUMN = "seatingCapacity";
     public static final String TYPE_COLUMN = "type";
     public static final String TRAIN_NAME_COLUMN = "train_name";
     public static final String ID_TRAIN_SET_COLUMN = "id_train_set";
@@ -18,7 +17,6 @@ public class Wagon {
 
     private String trainName;
     private Long id, idTrainSet, idWarehouseSet;
-    private int seatingCount;
     private Long idWagon;
     private String nameWarehouse;
     private int posTrain, type;
@@ -52,8 +50,7 @@ public class Wagon {
 
     }
 
-    public Wagon(int seatingCount, Long idWagon, String trainName, String nameWarehouse, int posTrain, int type) {
-        this.seatingCount = seatingCount;
+    public Wagon(Long idWagon, String trainName, String nameWarehouse, int posTrain, int type) {
         this.idWagon = idWagon;
         this.nameWarehouse = nameWarehouse;
         this.posTrain = posTrain;
@@ -62,9 +59,9 @@ public class Wagon {
         checkType(type);
     }
 
-    public Wagon(int seatingCount, Long idWagon, String trainName, String nameWarehouse,
+    public Wagon( Long idWagon, String trainName, String nameWarehouse,
                  int posTrain, int type, Long idCountTypePlace) {
-        this(seatingCount, idWagon, trainName, nameWarehouse, posTrain, type);
+        this( idWagon, trainName, nameWarehouse, posTrain, type);
         this.idCountTypePlace = idCountTypePlace;
     }
 
@@ -116,13 +113,6 @@ public class Wagon {
         this.posTrain = posTrain;
     }
 
-    public int getSeatingCount() {
-        return seatingCount;
-    }
-
-    public void setSeatingCount(int seatingCount) {
-        this.seatingCount = seatingCount;
-    }
 
     public String getTrainName() {
         return trainName;
@@ -146,7 +136,7 @@ public class Wagon {
 
     @Override
     public String toString() {
-        return "Wagon [id= " + this.id + ", seatingCapacity= " + this.seatingCount
+        return "Wagon [id= " + this.id
                 + ", nameWarehouse= " + this.nameWarehouse + ", idWagon= " + this.idWagon
                 + ", posTrain= " + this.posTrain + ", trainName= " + this.trainName
                 + ", type= " + defineType(this.type)

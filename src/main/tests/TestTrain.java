@@ -1,5 +1,6 @@
-package main;
+package main.tests;
 
+import main.DataSource;
 import main.dao.impl.wagon_dao_impl.WagonDaoImpl;
 import main.dao.impl.train_dao_impl.TrainDaoImpl;
 import main.dao.impl.train_dao_impl.TrainSetDaoImpl;
@@ -10,7 +11,7 @@ import main.model.train.TrainSet;
 import java.util.List;
 
 public class TestTrain {
-    private static final String PATH_DB = "jdbc:sqlite:C:\\Users\\Xiaomi\\IdeaProjects\\Course Project\\database\\railway.db";
+    public static final String PATH_DB = "jdbc:sqlite:C:\\Users\\Xiaomi\\IdeaProjects\\Course Project\\database\\railway.db";
 
     public static void main(String[] args) {
         DataSource dataSource = new DataSource();
@@ -38,12 +39,12 @@ public class TestTrain {
         wagon.setIdWagon(3l);
 
 
-        wagon.setSeatingCount(100);
+
 
         Wagon wagon1 = new Wagon();
         wagon1.setType(1);
         wagon1.setIdWagon(2l);
-        wagon1.setSeatingCount(200);
+
 
 
         WagonDaoImpl wagonDao = new WagonDaoImpl(dataSource);

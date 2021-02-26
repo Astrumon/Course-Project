@@ -6,6 +6,7 @@ import main.model.wagon.Place;
 import main.model.wagon.TypePlace;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,19 +34,20 @@ public class PlaceDaoImpl implements PlaceDao {
     @Override
     public List<Place> findAll() {
         Connection connection = null;
-        List<Place> places = null;
+        List<Place> places = new ArrayList<Place>();
         try {
             connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_ALL);
-            ResultSet rs = preparedStatement.executeQuery();
+            ResultSet resultSet = preparedStatement.executeQuery();
 
-            while (rs.next()) {
+            while (resultSet.next()) {
                 Place place = new Place();
-                place.setIdPlace(rs.getLong(Place.ID_PLACE_COLUMN));
-                place.setIdWagon(rs.getLong(Place.ID_WAGON_COLUMN));
-                place.setNumber(rs.getInt(Place.NUMBER_COLUMN));
-                place.setType(rs.getInt(Place.TYPE_COLUMN));
-                place.setStatus(rs.getInt(Place.STATUS_COLUMN));
+                place.setIdPlace(resultSet.getLong(Place.ID_PLACE_COLUMN));
+                place.setIdWagon(resultSet.getLong(Place.ID_WAGON_COLUMN));
+                place.setNumber(resultSet.getInt(Place.NUMBER_COLUMN));
+                place.setType(resultSet.getInt(Place.TYPE_COLUMN));
+                place.setStatus(resultSet.getInt(Place.STATUS_COLUMN));
+                place.setIdCountType(resultSet.getLong(Place.ID_COUNT_TYPE_COLUMN));
                 places.add(place);
             }
         } catch (SQLException exc) {
@@ -83,6 +85,7 @@ public class PlaceDaoImpl implements PlaceDao {
                 place.setNumber(resultSet.getInt(Place.NUMBER_COLUMN));
                 place.setType(resultSet.getInt(Place.TYPE_COLUMN));
                 place.setStatus(resultSet.getInt(Place.STATUS_COLUMN));
+                place.setIdCountType(resultSet.getLong(Place.ID_COUNT_TYPE_COLUMN));
             }
         } catch (SQLException exc) {
             System.out.println(exc);
@@ -163,6 +166,7 @@ public class PlaceDaoImpl implements PlaceDao {
             preparedStatement.setLong(1, place.getIdWagon());
             preparedStatement.setInt(2, place.getNumber());
             preparedStatement.setInt(3, place.getType());
+            preparedStatement.setLong(4, place.getIdCountType());
             preparedStatement.execute();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
 

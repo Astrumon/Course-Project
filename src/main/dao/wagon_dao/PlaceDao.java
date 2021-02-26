@@ -11,7 +11,8 @@ public interface PlaceDao {
             + "(" + Place.ID_WAGON_COLUMN
             + "," + Place.NUMBER_COLUMN
             + "," + Place.TYPE_COLUMN
-            + ") VALUES(?,?,?) ";
+            + "," + Place.ID_COUNT_TYPE_COLUMN
+            + ") VALUES(?,?,?,?) ";
     String SQL_UPDATE = "UPDATE " + Place.TABLE_NAME + " SET "
             + Place.ID_WAGON_COLUMN + " = ?, "
             + Place.NUMBER_COLUMN + " = ?, "
