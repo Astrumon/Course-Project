@@ -290,7 +290,7 @@ public class TrainSetDaoImpl implements TrainSetDao {
     }
 
     /**
-     * Обновляет запись в таблице train информацией об объекте trainSet
+     * Обновляет запись в таблице train_set информацией об объекте trainSet
      * @param trainSet
      */
     @Override

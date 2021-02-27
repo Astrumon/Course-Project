@@ -10,13 +10,26 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Класс WarehouseDaoImpl служит для создания наименований складов
+ * взаимодействует с таблицами warehouse, warehouse_set.
+ *
+ */
 public class WarehouseDaoImpl implements WarehouseDao {
     private DataSource dataSource;
 
+    /**
+     * Конструктор служит для установки подключения к базе данных
+     * @param dataSource
+     */
     public WarehouseDaoImpl(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
+    /**
+     * Выборка всей информации из таблицы warehouse
+     * @return
+     */
     @Override
     public List<Warehouse> findAll() {
         Connection connection = null;
@@ -47,6 +60,11 @@ public class WarehouseDaoImpl implements WarehouseDao {
         return warehouses;
     }
 
+    /**
+     * Выборка всей информации одной записи по заданому id из таблицы warehouse
+     * @param id
+     * @return
+     */
     @Override
     public Warehouse findById(Long id) {
         Connection connection = null;
@@ -76,6 +94,11 @@ public class WarehouseDaoImpl implements WarehouseDao {
         return warehouse;
     }
 
+    /**
+     * Выборка всей информации одной записи по заданому name из таблицы warehouse
+     * @param name
+     * @return
+     */
     @Override
     public Warehouse findByName(String name) {
         Connection connection = null;
@@ -105,6 +128,10 @@ public class WarehouseDaoImpl implements WarehouseDao {
         return warehouse;
     }
 
+    /**
+     * Обновляет запись в таблице train информацией об объекте warehouse
+     * @param warehouse
+     */
     @Override
     public void update(Warehouse warehouse) {
         Connection connection = null;
@@ -127,6 +154,10 @@ public class WarehouseDaoImpl implements WarehouseDao {
         }
     }
 
+    /**
+     * Удаление записи с таблицы warehouse по warehouse.id
+     * @param warehouse
+     */
     @Override
     public void delete(Warehouse warehouse) {
         Connection connection = null;
@@ -147,6 +178,10 @@ public class WarehouseDaoImpl implements WarehouseDao {
         }
     }
 
+    /**
+     * Создания в таблице warehouse_set записей с информацией про состав заданого склада
+     * @param warehouse
+     */
     private void createWarehousePositions(Warehouse warehouse) {
         WarehouseSetDaoImpl warehouseSetDao = new WarehouseSetDaoImpl(dataSource);
         for (int i = 1; i <= warehouse.getCapacity(); i++) {
@@ -154,6 +189,11 @@ public class WarehouseDaoImpl implements WarehouseDao {
         }
     }
 
+    /**
+     * Вставка записи информации про склад в таблицу warehouse.
+     * вызов функции createTrainSetPosition(Warehouse warehouse)
+     * @param warehouse
+     */
     @Override
     public void insert(Warehouse warehouse) {
         Connection connection = null;
@@ -179,6 +219,10 @@ public class WarehouseDaoImpl implements WarehouseDao {
         }
     }
 
+    /**
+     * Удаление записи с таблицы warehouse по warehouse.name
+     * @param warehouse
+     */
     @Override
     public void deleteByName(Warehouse warehouse) {
         Connection connection = null;

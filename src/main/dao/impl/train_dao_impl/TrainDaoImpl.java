@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Класс TrainDaoImpl служит для создания позиций в поезде
+ * Класс TrainDaoImpl служит для создания наименований поездов
  * взаимодействует с таблицами train, train_set.
  *
  */

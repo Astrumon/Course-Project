@@ -12,7 +12,8 @@ public interface TypePlaceDao {
             + "," + TypePlace.COUNT_MIDDLE_COLUMN
             + "," + TypePlace.COUNT_LOW_COLUMN
             + "," + TypePlace.COUNT_SEATS_COLUMN
-            + ") VALUES(?,?,?,?)";
+            + "," + TypePlace.ID_WAGON_COLUMN
+            + ") VALUES(?,?,?,?,?)";
     String SQL_UPDATE = "UPDATE " + TypePlace.TABLE_NAME + " SET "
             + TypePlace.ID_WAGON_COLUMN + " = ?, "
             + TypePlace.COUNT_VIP_COLUMN + " = ?, "
@@ -29,7 +30,7 @@ public interface TypePlaceDao {
 
     void delete(TypePlace typePlace);
 
-    void insert(TypePlace typePlace);
+    Long insert(TypePlace typePlace);
 
     void update(TypePlace typePlace);
 

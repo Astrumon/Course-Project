@@ -130,9 +130,9 @@ public class TypePlaceDaoImpl implements TypePlaceDao {
      * @param typePlace
      */
     @Override
-    public void insert(TypePlace typePlace) {
+    public Long insert(TypePlace typePlace) {
         Connection connection = null;
-
+        Long id = null;
         try {
             connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
@@ -140,12 +140,14 @@ public class TypePlaceDaoImpl implements TypePlaceDao {
             preparedStatement.setInt(2, typePlace.getCountMiddle());
             preparedStatement.setInt(3, typePlace.getCountLow());
             preparedStatement.setInt(4, typePlace.getCountSeats());
+            preparedStatement.setLong(5, typePlace.getIdWagon());
             preparedStatement.execute();
 
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
 
             while (resultSet.next()) {
-                typePlace.setIdTypePlace(resultSet.getLong(1));
+                id = resultSet.getLong(1);
+                typePlace.setIdTypePlace(id);
             }
         } catch (SQLException exc) {
             System.out.println(exc);
@@ -156,6 +158,8 @@ public class TypePlaceDaoImpl implements TypePlaceDao {
                 System.out.println(exc);
             }
         }
+
+        return id;
 
     }
 

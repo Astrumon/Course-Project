@@ -23,7 +23,7 @@ public interface PlaceDao {
             + Place.STATUS_COLUMN + " = ? "
             + " WHERE " + Place.ID_PLACE_COLUMN + " = ?";
     String SQL_DELETE = "DELETE FROM " + Place.TABLE_NAME
-            + " WHERE " + Place.NUMBER_COLUMN + " = ?";
+            + " WHERE " + Place.ID_PLACE_COLUMN + " = ?";
 
     List<Place> findAll();
 

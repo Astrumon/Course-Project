@@ -11,14 +11,26 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Класс WarehouseSetDaoImpl служит для создания позиций для вагонов определенного склада
+ * Взаимодействует с таблицами warehouse, warehouse_set, wagon
+ */
 public class WarehouseSetDaoImpl implements WarehouseSetDao {
 
     private DataSource dataSource;
 
+    /**
+     * Конструктор для подключения к базе данных
+     * @param dataSource
+     */
     public WarehouseSetDaoImpl(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
+    /**
+     * Выборка всей информации из таблицы warehouse_set
+     * @return
+     */
     @Override
     public List<WarehouseSet> findAll() {
         Connection connection = null;
@@ -48,6 +60,11 @@ public class WarehouseSetDaoImpl implements WarehouseSetDao {
         return warehouseSets;
     }
 
+    /**
+     * Выборка всей информации одной записи по заданому id из таблицы warehouse_set
+     * @param id
+     * @return
+     */
     @Override
     public WarehouseSet findById(Long id) {
         Connection connection = null;
@@ -76,6 +93,11 @@ public class WarehouseSetDaoImpl implements WarehouseSetDao {
         return warehouseSet;
     }
 
+    /**
+     * Выборка всей информации одной записи по заданому названию склада из таблицы warehouse_set
+     * @param name
+     * @return
+     */
     @Override
     public WarehouseSet findByName(String name) {
         Connection connection = null;
@@ -106,6 +128,10 @@ public class WarehouseSetDaoImpl implements WarehouseSetDao {
         return warehouseSet;
     }
 
+    /**
+     * Удаление записи с таблицы warehouseSet по warehouseSet.id
+     * @param warehouseSet
+     */
     @Override
     public void delete(WarehouseSet warehouseSet) {
         Connection connection = null;
@@ -125,6 +151,10 @@ public class WarehouseSetDaoImpl implements WarehouseSetDao {
         }
     }
 
+    /**
+     * Удаление записи с таблицы warehouse_set по warehouse.name
+     * @param warehouse
+     */
     @Override
     public void deleteByWarehouseName(Warehouse warehouse) {
         Connection connection = null;
@@ -133,11 +163,6 @@ public class WarehouseSetDaoImpl implements WarehouseSetDao {
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_BY_NAME);
             preparedStatement.setString(1, warehouse.getName());
             preparedStatement.execute();
-
-
-            WagonDaoImpl wagonDao = new WagonDaoImpl(dataSource);
-
-
 
         } catch (SQLException exc) {
             System.out.println(exc);
@@ -150,6 +175,10 @@ public class WarehouseSetDaoImpl implements WarehouseSetDao {
         }
     }
 
+    /**
+     * Обновляет запись в таблице warehouse_set информацией об объекте warehouseSet
+     * @param warehouseSet
+     */
     @Override
     public void update(WarehouseSet warehouseSet) {
         Connection connection = null;
@@ -173,15 +202,34 @@ public class WarehouseSetDaoImpl implements WarehouseSetDao {
     }
 
 
+    /**
+     * Метод для проверки названия склада в котором находится вагон
+     * @param wagon
+     * @return
+     */
     private boolean isEmptyWarehouseName(Wagon wagon) {
         return wagon.getNameWarehouse() == null;
     }
 
+    /**
+     * Метод для проверки позиции вагона на складе
+     * @param warehouseSet
+     * @param position
+     * @return
+     */
     private boolean samePosition(WarehouseSet warehouseSet, int position) {
         return warehouseSet.getPosition() == position;
     }
 
 
+    /**
+     * Метод который служит для добавления информации о вагоне в таблицу warehouse_set
+     * Информация о складе так же записывается в таблицу wagon
+     * @param warehouseName
+     * @param wagon
+     * @param position
+     * @return
+     */
     @Override
     public void addWagon( String warehouseName, Wagon wagon, int position) {
 
@@ -232,6 +280,10 @@ public class WarehouseSetDaoImpl implements WarehouseSetDao {
         }
     }
 
+    /**
+     * Вставка записи информации про поезд в таблицу warehouse_set.
+     * @param warehouseSet
+     */
     @Override
     public void insert(WarehouseSet warehouseSet) {
         Connection connection = null;
