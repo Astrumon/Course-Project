@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class Main {
-    private static final String PATH_DB = "jdbc:sqlite:C:\\Users\\Xiaomi\\IdeaProjects\\Course Project\\database\\railway.db";
+    public static final String PATH_DB = "jdbc:sqlite:C:\\Users\\Xiaomi\\IdeaProjects\\Course Project\\database\\railway.db";
 
     public static void main(String[] args) throws SQLException {
         DataSource dataSource = new DataSource();

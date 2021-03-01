@@ -246,11 +246,11 @@ public class WagonDaoImpl implements WagonDao {
         place.setIdCountType(typePlace.getIdTypePlace());
 
         for (int i = 1; i <= typePlace.defineType(type); i++) {
-            NumberGenerator.number++;
-            place.setNumber(NumberGenerator.generate(type));
+
+            place.setNumber(NumberGenerator.number++);
             placeDao.insert(place);
-            if (i == typePlace.defineType(type)) {
-                NumberGenerator.number = 0;
+            if (i == typePlace.getAllPlace()) {
+                NumberGenerator.number = 1;
             }
         }
     }
@@ -385,7 +385,7 @@ public class WagonDaoImpl implements WagonDao {
      * 11(первый индекс числа отвечает за тип места, второй за его количество)
      */
     private static class NumberGenerator {
-        static int number;
+        static int number = 1;
 
         public static int generate(int type) {
             return Integer.parseInt(type + "" + number);
