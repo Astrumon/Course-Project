@@ -42,9 +42,10 @@ public class WarehouseDaoImpl implements WarehouseDao {
 
             while (rs.next()) {
                 Warehouse warehouse = new Warehouse();
-                warehouse.setId(rs.getLong(Wagon.ID_COLUMN_COLUMN));
+                warehouse.setId(rs.getLong(Wagon.ID_COLUMN));
                 warehouse.setCapacity(rs.getInt(Warehouse.CAPACITY_COLUMN));
                 warehouse.setName(rs.getString(Warehouse.NAME_WAREHOUSE_COLUMN));
+                warehouse.setCountWagons(rs.getInt(Warehouse.COUNT_WAGONS_COLUMN));
                 warehouses.add(warehouse);
             }
         } catch (SQLException exc) {
@@ -79,6 +80,7 @@ public class WarehouseDaoImpl implements WarehouseDao {
                 warehouse.setId(rs.getLong(Warehouse.ID_COLUMN));
                 warehouse.setCapacity(rs.getInt(Warehouse.CAPACITY_COLUMN));
                 warehouse.setName(rs.getString(Warehouse.NAME_WAREHOUSE_COLUMN));
+                warehouse.setCountWagons(rs.getInt(Warehouse.COUNT_WAGONS_COLUMN));
             }
 
 
@@ -113,6 +115,7 @@ public class WarehouseDaoImpl implements WarehouseDao {
                 warehouse.setId(rs.getLong(Warehouse.ID_COLUMN));
                 warehouse.setCapacity(rs.getInt(Warehouse.CAPACITY_COLUMN));
                 warehouse.setName(rs.getString(Warehouse.NAME_WAREHOUSE_COLUMN));
+                warehouse.setCountWagons(rs.getInt(Warehouse.COUNT_WAGONS_COLUMN));
             }
 
 
@@ -139,8 +142,8 @@ public class WarehouseDaoImpl implements WarehouseDao {
             connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE);
             preparedStatement.setInt(1, warehouse.getCapacity());
-            preparedStatement.setString(2, warehouse.getName());
-            preparedStatement.setLong(3, warehouse.getId());
+            preparedStatement.setInt(2, warehouse.getCountWagons());
+            preparedStatement.setString(3, warehouse.getName());
             preparedStatement.execute();
 
         } catch (SQLException exc) {
@@ -201,7 +204,6 @@ public class WarehouseDaoImpl implements WarehouseDao {
             connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, warehouse.getName());
-            preparedStatement.setInt(2, warehouse.getCapacity());
             preparedStatement.execute();
             ResultSet rs = preparedStatement.getGeneratedKeys();
             while (rs.next()) {
@@ -243,5 +245,24 @@ public class WarehouseDaoImpl implements WarehouseDao {
         }
     }
 
+    @Override
+    public void updateCountWagon(Warehouse warehouse) {
+        Connection connection = null;
+        try {
+            connection = dataSource.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_COUNT_WAGON);
+            preparedStatement.setInt(1, warehouse.getCountWagons());
+            preparedStatement.setString(2, warehouse.getName());
+            preparedStatement.execute();
 
+        } catch (SQLException exc) {
+            System.out.println(exc);
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException exc) {
+                System.out.println(exc);
+            }
+        }
+    }
 }

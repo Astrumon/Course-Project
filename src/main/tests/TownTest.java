@@ -2,8 +2,8 @@ package main.tests;
 
 
 import main.DataSource;
-import main.dao.impl.TownDaoImpl;
-import main.model.Town;
+import main.dao.impl.route_dao_impl.TownDaoImpl;
+import main.model.route.Town;
 
 public class TownTest {
     public static final String PATH_DB = "jdbc:sqlite:C:\\Users\\Xiaomi\\IdeaProjects\\Course Project\\database\\railway.db";

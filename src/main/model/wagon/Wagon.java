@@ -1,8 +1,10 @@
 package main.model.wagon;
 
+import javafx.beans.property.SimpleLongProperty;
+
 public class Wagon {
     public static final String TABLE_NAME = "wagon";
-    public static final String ID_COLUMN_COLUMN = "id";
+    public static final String ID_COLUMN = "id";
     public static final String ID_WAGON_COLUMN = "id_wagon";
     public static final String NAME_WAREHOUSE_COLUMN = "name_warehouse";
     public static final String POSITION_TRAIN_COLUMN = "pos_train";
@@ -11,6 +13,7 @@ public class Wagon {
     public static final String ID_TRAIN_SET_COLUMN = "id_train_set";
     public static final String ID_WAREHOUSE_SET_COLUMN = "id_warehouse_set";
     public static final String ID_COUNT_TYPE_PLACE_COLUMN = "id_count_type_place";
+    public static final String COUNT_SEATS_COLUMN = "count_seats";
 
     public static final int PASSENGER_TYPE = 1;
     public static final int CARGO_TYPE = 2;
@@ -21,6 +24,20 @@ public class Wagon {
     private String nameWarehouse;
     private int posTrain, type;
     private Long idCountTypePlace;
+    private int countSeats;
+
+    public int getCountSeats() {
+        return countSeats;
+    }
+
+    public void setCountSeats(int countSeats) {
+        this.countSeats = countSeats;
+    }
+
+    private SimpleLongProperty idWagonProperty = new SimpleLongProperty();
+
+
+
 
     public Long getIdCountTypePlace() {
         return idCountTypePlace;

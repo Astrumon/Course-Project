@@ -1,8 +1,8 @@
-package main.dao.impl;
+package main.dao.impl.route_dao_impl;
 
 import main.DataSource;
-import main.dao.TownDao;
-import main.model.Town;
+import main.dao.route_dao.TownDao;
+import main.model.route.Town;
 
 import java.sql.*;
 import java.util.ArrayList;

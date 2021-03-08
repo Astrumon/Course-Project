@@ -5,13 +5,22 @@ public class Warehouse {
     public static final String ID_COLUMN = "id";
     public static final String CAPACITY_COLUMN = "capacity";
     public static final String NAME_WAREHOUSE_COLUMN = "name";
+    public static final String COUNT_WAGONS_COLUMN = "count_wagons";
 
     private Long id;
-    private int capacity;
+    private int capacity, countWagons;
     private String name;
 
     public Warehouse() {
 
+    }
+
+    public int getCountWagons() {
+        return countWagons;
+    }
+
+    public void setCountWagons(int countWagons) {
+        this.countWagons = countWagons;
     }
 
     public int getCapacity() {

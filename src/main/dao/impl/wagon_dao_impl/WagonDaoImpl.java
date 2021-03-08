@@ -46,7 +46,7 @@ public class WagonDaoImpl implements WagonDao {
 
             while (rs.next()) {
                 Wagon wagon = new Wagon();
-                wagon.setId(rs.getLong(Wagon.ID_COLUMN_COLUMN));
+                wagon.setId(rs.getLong(Wagon.ID_COLUMN));
                 wagon.setIdWagon(rs.getLong(Wagon.ID_WAGON_COLUMN));
                 wagon.setNameWarehouse(rs.getString(Wagon.NAME_WAREHOUSE_COLUMN));
                 wagon.setTrainName(rs.getString(Wagon.TRAIN_NAME_COLUMN));
@@ -55,6 +55,7 @@ public class WagonDaoImpl implements WagonDao {
                 wagon.setIdTrainSet(rs.getLong(Wagon.ID_TRAIN_SET_COLUMN));
                 wagon.setIdWarehouseSet(rs.getLong(Wagon.ID_WAREHOUSE_SET_COLUMN));
                 wagon.setIdCountTypePlace(rs.getLong(Wagon.ID_COUNT_TYPE_PLACE_COLUMN));
+                wagon.setCountSeats(rs.getInt(Wagon.COUNT_SEATS_COLUMN));
                 wagons.add(wagon);
             }
         } catch (SQLException exc) {
@@ -87,13 +88,14 @@ public class WagonDaoImpl implements WagonDao {
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 wagon = new Wagon();
-                wagon.setId(rs.getLong(Wagon.ID_COLUMN_COLUMN));
+                wagon.setId(rs.getLong(Wagon.ID_COLUMN));
                 wagon.setIdWagon(rs.getLong(Wagon.ID_WAGON_COLUMN));
                 wagon.setNameWarehouse(rs.getString(Wagon.NAME_WAREHOUSE_COLUMN));
                 wagon.setPosTrain(rs.getInt(Wagon.POSITION_TRAIN_COLUMN));
                 wagon.setIdTrainSet(rs.getLong(Wagon.ID_TRAIN_SET_COLUMN));
                 wagon.setIdWarehouseSet(rs.getLong(Wagon.ID_WAREHOUSE_SET_COLUMN));
                 wagon.setIdCountTypePlace(rs.getLong(Wagon.ID_COUNT_TYPE_PLACE_COLUMN));
+                wagon.setCountSeats(rs.getInt(Wagon.COUNT_SEATS_COLUMN));
                 wagon.setType(rs.getInt(Wagon.TYPE_COLUMN));
             }
         } catch (SQLException exc) {
@@ -125,7 +127,7 @@ public class WagonDaoImpl implements WagonDao {
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 wagon = new Wagon();
-                wagon.setId(rs.getLong(Wagon.ID_COLUMN_COLUMN));
+                wagon.setId(rs.getLong(Wagon.ID_COLUMN));
                 wagon.setIdWagon(rs.getLong(Wagon.ID_WAGON_COLUMN));
                 wagon.setTrainName(rs.getString(Wagon.TRAIN_NAME_COLUMN));
                 wagon.setNameWarehouse(rs.getString(Wagon.NAME_WAREHOUSE_COLUMN));
@@ -133,6 +135,7 @@ public class WagonDaoImpl implements WagonDao {
                 wagon.setIdTrainSet(rs.getLong(Wagon.ID_TRAIN_SET_COLUMN));
                 wagon.setIdWarehouseSet(rs.getLong(Wagon.ID_WAREHOUSE_SET_COLUMN));
                 wagon.setIdCountTypePlace(rs.getLong(Wagon.ID_COUNT_TYPE_PLACE_COLUMN));
+                wagon.setCountSeats(rs.getInt(Wagon.COUNT_SEATS_COLUMN));
                 wagon.setType(rs.getInt(Wagon.TYPE_COLUMN));
             }
         } catch (SQLException exc) {
@@ -216,7 +219,7 @@ public class WagonDaoImpl implements WagonDao {
             connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE);
 
-            preparedStatement.setLong(1, wagon.getId());
+            preparedStatement.setLong(1, wagon.getIdWagon());
             preparedStatement.execute();
 
         } catch (SQLException exc) {
@@ -259,7 +262,7 @@ public class WagonDaoImpl implements WagonDao {
      * Создание мест для вагона
      * @param idCountTypePlace
      */
-    private void createPlace(Long idCountTypePlace) {
+    protected void createPlace(Long idCountTypePlace) {
         TypePlaceDaoImpl typePlaceDao = new TypePlaceDaoImpl(dataSource);
         TypePlace typePlace = typePlaceDao.findById(idCountTypePlace);
 
@@ -269,6 +272,27 @@ public class WagonDaoImpl implements WagonDao {
         createTypePlace(typePlace, TypePlace.SEATS);
     }
 
+    @Override
+    public void setCountSeats(TypePlace typePlace) {
+        Connection connection = null;
+        try {
+            connection = dataSource.getConnection();
+
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_COUNT_SEATS);
+            preparedStatement.setLong(1, typePlace.getAllPlace());
+            preparedStatement.setLong(2, typePlace.getIdWagon());
+            preparedStatement.execute();
+
+        } catch (SQLException exc ) {
+            System.out.println(exc);
+        } finally {
+            try {
+                connection.close();
+            }catch (SQLException exc) {
+                System.out.println(exc);
+            }
+        }
+    }
     /**
      * Добавляет пассажирскому вагону доступное количество созданных мест определенного типа
      * @param wagon
@@ -282,6 +306,9 @@ public class WagonDaoImpl implements WagonDao {
 
             typePlace.setIdWagon(wagon.getIdWagon());
             typePlaceDao.insert(typePlace);
+
+            WagonDaoImpl wagonDao = new WagonDaoImpl(dataSource);
+            wagonDao.setCountSeats(typePlace);
 
             try {
                 connection = dataSource.getConnection();
@@ -365,7 +392,8 @@ public class WagonDaoImpl implements WagonDao {
             preparedStatement.setLong(5, wagon.getIdTrainSet());
             preparedStatement.setLong(6, wagon.getIdWarehouseSet());
             preparedStatement.setLong(7, wagon.getId());
-            preparedStatement.setLong(8, wagon.getIdCountTypePlace());
+            preparedStatement.setLong(8, wagon.getId());
+            preparedStatement.setLong(9, wagon.getIdCountTypePlace());
             preparedStatement.execute();
 
         } catch (SQLException exc) {

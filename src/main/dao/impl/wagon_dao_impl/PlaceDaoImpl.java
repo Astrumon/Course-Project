@@ -110,7 +110,7 @@ public class PlaceDaoImpl implements PlaceDao {
         try {
             connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE);
-            preparedStatement.setLong(1, place.getIdPlace());
+            preparedStatement.setLong(1, place.getIdWagon());
             preparedStatement.execute();
         } catch (SQLException exc) {
             System.out.println(exc);

@@ -1,4 +1,4 @@
-package main.model;
+package main.model.route;
 
 public class Town {
     public static final String TABLE_NAME = "town";

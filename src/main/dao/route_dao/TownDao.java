@@ -1,6 +1,6 @@
-package main.dao;
+package main.dao.route_dao;
 
-import main.model.Town;
+import main.model.route.Town;
 
 import java.util.List;
 

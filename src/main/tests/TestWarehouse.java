@@ -45,7 +45,7 @@ public class TestWarehouse {
         wagonDao.insert(wagon1);
 
        warehouseSetDao.addWagon("warehouse#1", wagon, 3);
-        warehouseSetDao.addWagon("warehouse#2", wagon1, 2);
+        warehouseSetDao.addWagon("warehouse#2", wagon1,2);
         System.out.println();
        // warehouseSetDao.deleteByWarehouseName(new Warehouse("warehouse#2",2));
         showWarehouseSet(warehouseSetDao.findAll());

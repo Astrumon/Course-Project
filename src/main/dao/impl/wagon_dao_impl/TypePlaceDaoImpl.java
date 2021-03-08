@@ -2,6 +2,7 @@ package main.dao.impl.wagon_dao_impl;
 
 import main.DataSource;
 import main.dao.wagon_dao.TypePlaceDao;
+import main.model.wagon.Place;
 import main.model.wagon.TypePlace;
 
 import java.sql.*;
@@ -124,6 +125,30 @@ public class TypePlaceDaoImpl implements TypePlaceDao {
 
     }
 
+    @Override
+    public boolean deleteByIdWagon(Long id) {
+        Connection connection = null;
+
+        try {
+            connection = dataSource.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_BY_ID_WAGON);
+            preparedStatement.setLong(1, id);
+            preparedStatement.execute();
+        } catch (SQLException exc) {
+            System.out.println(exc);
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException exc) {
+                System.out.println(exc);
+            }
+        }
+
+        return true;
+    }
+
+
+
     /**
      * Вставка записи информации о typePlace в таблицу count_type_place.
      *
@@ -170,18 +195,30 @@ public class TypePlaceDaoImpl implements TypePlaceDao {
     @Override
     public void update(TypePlace typePlace) {
         Connection connection = null;
+        WagonDaoImpl wagonDao = new WagonDaoImpl(dataSource);
+
 
         try {
             connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE);
 
-            preparedStatement.setLong(1, typePlace.getIdWagon());
-            preparedStatement.setInt(2, typePlace.getCountVip());
-            preparedStatement.setInt(3, typePlace.getCountMiddle());
-            preparedStatement.setInt(4, typePlace.getCountLow());
-            preparedStatement.setInt(5, typePlace.getCountSeats());
-            preparedStatement.setLong(6, typePlace.getIdTypePlace());
+
+            preparedStatement.setInt(1, typePlace.getCountVip());
+            preparedStatement.setInt(2, typePlace.getCountMiddle());
+            preparedStatement.setInt(3, typePlace.getCountLow());
+            preparedStatement.setInt(4, typePlace.getCountSeats());
+            preparedStatement.setLong(5, typePlace.getIdWagon());
             preparedStatement.execute();
+
+            wagonDao.setCountSeats(typePlace);
+
+            PlaceDaoImpl placeDao = new PlaceDaoImpl(dataSource);
+            Place place = new Place();
+            place.setIdWagon(typePlace.getIdWagon());
+            placeDao.delete(place);
+
+            typePlace.setIdTypePlace(findByIdWagon(typePlace.getIdWagon()).getIdTypePlace());
+            wagonDao.createPlace(typePlace.getIdTypePlace());
         } catch (SQLException exc) {
             System.out.println(exc);
         } finally {
@@ -192,5 +229,35 @@ public class TypePlaceDaoImpl implements TypePlaceDao {
             }
         }
 
+    }
+
+    @Override
+    public TypePlace findByIdWagon(Long id) {
+        Connection connection = null;
+        TypePlace typePlace = null;
+        try {
+            connection = dataSource.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_BY_ID_WAGON);
+            preparedStatement.setLong(1, id);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                typePlace = new TypePlace();
+                typePlace.setIdTypePlace(rs.getLong(TypePlace.ID_TYPE_PLACE_COLUMN));
+                typePlace.setIdWagon(rs.getLong(TypePlace.ID_WAGON_COLUMN));
+                typePlace.setCountVip(rs.getInt(TypePlace.COUNT_VIP_COLUMN));
+                typePlace.setCountMiddle(rs.getInt(TypePlace.COUNT_MIDDLE_COLUMN));
+                typePlace.setCountLow(rs.getInt(TypePlace.COUNT_LOW_COLUMN));
+                typePlace.setCountSeats(rs.getInt(TypePlace.COUNT_SEATS_COLUMN));
+            }
+        } catch (SQLException exc) {
+            System.out.println(exc);
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException exc) {
+                System.out.println(exc);
+            }
+        }
+        return typePlace;
     }
 }

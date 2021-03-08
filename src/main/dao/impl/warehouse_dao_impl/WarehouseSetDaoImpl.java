@@ -236,6 +236,19 @@ public class WarehouseSetDaoImpl implements WarehouseSetDao {
         Connection connection = null;
 
         WarehouseSetDaoImpl warehouseSetDao = new WarehouseSetDaoImpl(dataSource);
+        int count = 1;
+        for (WarehouseSet warehouseSet : warehouseSetDao.findAll()) {
+            if (warehouseSet.getIdWagon() != 0 && warehouseSet.getNameWarehouse().equals(warehouseName)) {
+                count++;
+            }
+        }
+        System.out.println(count);
+        Warehouse warehouse = new Warehouse();
+        warehouse.setName(warehouseName);
+        warehouse.setCountWagons(count);
+
+        WarehouseDaoImpl warehouseDao = new WarehouseDaoImpl(dataSource);
+         warehouseDao.updateCountWagon(warehouse);
         List<WarehouseSet> wSetsDao = warehouseSetDao.findAll();
 
         Long idWagon = -1l;

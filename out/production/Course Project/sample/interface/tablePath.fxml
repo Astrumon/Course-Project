@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="520.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controllers.ControllerTablePath">
+    <children>
+        <TableView prefHeight="520.0" prefWidth="930.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <columns>
+                <TableColumn prefWidth="48.79995822906494" text="№" />
+                <TableColumn prefWidth="212.00007247924805" text="Початкова точка" />
+                <TableColumn minWidth="0.0" prefWidth="206.4000244140625" text="Кінцева точка" />
+            <TableColumn minWidth="0.0" prefWidth="112.0" text="Куплених квитків" />
+            <TableColumn minWidth="0.0" prefWidth="93.5999755859375" text="Усього квитків" />
+            <TableColumn minWidth="0.0" prefWidth="115.2000732421875" text="Час відправлення" />
+            <TableColumn minWidth="0.0" prefWidth="139.19998779296873" text="Час прибуття" />
+            </columns>
+        </TableView>
+    </children>
+</AnchorPane>

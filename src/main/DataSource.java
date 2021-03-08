@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DataSource {
+    public final static String PATH = "jdbc:sqlite:C:\\Users\\Xiaomi\\IdeaProjects\\Course Project\\database\\railway.db";
     private String url;
 
     public Connection getConnection() throws SQLException {
