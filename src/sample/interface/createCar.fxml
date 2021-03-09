@@ -28,7 +28,7 @@
                   <Font size="18.0" />
                </font>
             </TextField>
-            <Label text="Назва вагону">
+            <Label text="Номер вагону">
                <font>
                   <Font size="18.0" />
                </font>

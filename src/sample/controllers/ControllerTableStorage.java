@@ -41,6 +41,8 @@ public class ControllerTableStorage {
 
     private ObservableList<Warehouse> warehouses;
 
+
+
     @FXML
     void initialize() {
         DataSource dataSource = new DataSource();
@@ -69,11 +71,6 @@ public class ControllerTableStorage {
                 return new SimpleIntegerProperty(idNumber);
             }
         });
-
-
-
-
-
 
 
         tblCountCars.setCellValueFactory(new PropertyValueFactory<Warehouse, String>("countWagons"));

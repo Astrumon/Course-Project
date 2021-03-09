@@ -36,7 +36,7 @@ public interface TypePlaceDao {
 
     Long insert(TypePlace typePlace);
 
-    void update(TypePlace typePlace);
+    boolean update(TypePlace typePlace);
 
     TypePlace findByIdWagon(Long id);
 

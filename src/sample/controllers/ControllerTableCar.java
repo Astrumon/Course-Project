@@ -42,6 +42,8 @@ public class ControllerTableCar {
     @FXML
     private TableColumn tblCount;
 
+    public static final String WAGON_PREFIX_NAME = "Вагон№ ";
+
 
     private ObservableList<Wagon> wagons;
 
@@ -58,7 +60,7 @@ public class ControllerTableCar {
             @Override
             public ObservableValue call(TableColumn.CellDataFeatures cellDataFeatures) {
                 Wagon wagon = (Wagon) cellDataFeatures.getValue();
-                return new SimpleLongProperty(wagon.getIdWagon());
+                return new SimpleStringProperty(WAGON_PREFIX_NAME + wagon.getIdWagon());
             }
         });
 
@@ -78,7 +80,8 @@ public class ControllerTableCar {
             TableRow<Wagon> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && (!row.isEmpty())) {
-//                    Wagon rowData = row.getItem();
+                    Wagon rowData = row.getItem();
+                    System.out.println(rowData);
 //                  FxmlLoader object = new FxmlLoader();
 //                    Pane view = object.getPage("createCar");
 //                   BorderPane borderPane = new BorderPane();

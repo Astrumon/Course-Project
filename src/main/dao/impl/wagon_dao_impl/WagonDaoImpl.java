@@ -299,29 +299,26 @@ public class WagonDaoImpl implements WagonDao {
      * @param typePlace
      */
     @Override
-    public void setTypePlace(Wagon wagon, TypePlace typePlace) {
+    public boolean setTypePlace(Wagon wagon, TypePlace typePlace) {
         Connection connection = null;
         if (wagon.getType() == Wagon.PASSENGER_TYPE) {
             TypePlaceDaoImpl typePlaceDao = new TypePlaceDaoImpl(dataSource);
-
             typePlace.setIdWagon(wagon.getIdWagon());
             typePlaceDao.insert(typePlace);
 
             WagonDaoImpl wagonDao = new WagonDaoImpl(dataSource);
             wagonDao.setCountSeats(typePlace);
-
             try {
                 connection = dataSource.getConnection();
-
                 try {
                     PreparedStatement preparedStatementWagon = connection.prepareStatement(SQL_UPDATE_ID_TYPE_PLACE);
                     preparedStatementWagon.setLong(1, typePlace.getIdTypePlace());
                     preparedStatementWagon.setLong(2, typePlace.getIdWagon());
                     preparedStatementWagon.execute();
-
                     createPlace(typePlace.getIdTypePlace());
                 } catch (NullPointerException exc) {
                     System.out.println(exc + " duplicate id_type_place");
+                    return false;
                 }
             } catch (SQLException exc) {
                 System.out.println(exc);
@@ -330,10 +327,13 @@ public class WagonDaoImpl implements WagonDao {
                     connection.close();
                 } catch (SQLException exc) {
                     System.out.println(exc);
+
                 }
             }
+            return true;
         } else {
             System.out.println("CARGO");
+            return false;
         }
     }
 

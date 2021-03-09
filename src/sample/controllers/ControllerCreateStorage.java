@@ -1,9 +1,5 @@
 package sample.controllers;
 
-import java.net.URL;
-import java.util.Arrays;
-import java.util.ResourceBundle;
-
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,6 +11,12 @@ import main.dao.impl.warehouse_dao_impl.WarehouseSetDaoImpl;
 import main.model.wagon.Wagon;
 import main.model.warehouse.Warehouse;
 import main.model.warehouse.WarehouseSet;
+import support.AlertGenerator;
+import support.ParseId;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+
 
 public class ControllerCreateStorage {
 
@@ -39,7 +41,6 @@ public class ControllerCreateStorage {
     @FXML
     private TableView<Wagon> tableCar;
 
-    private String wagonName = "Вагон№ ";
 
     @FXML
     void buttonDeleteStorageAc(ActionEvent event) {
@@ -51,7 +52,7 @@ public class ControllerCreateStorage {
         warehouse.setName(textFieldNameStorage.getText());
 
         warehouseDao.deleteByName(warehouse);
-        alert("Склад успішно видалено");
+        AlertGenerator.info("Склад успішно видалено");
     }
 
 
@@ -72,23 +73,18 @@ public class ControllerCreateStorage {
         }
 
 
-
-
-//        warehouseDao.insert(warehouse);
-//        pos = 0;
-//        alert("Склад успішно створено");
         if (warehouseDao.findAll().size() == 0) {
             warehouseDao.insert(warehouse);
-            alert("Склад успішно створено");
+            AlertGenerator.info("Склад успішно створено");
         }
         int count = 0;
         for (Warehouse warehouse1 : warehouseDao.findAll()) {
 
             if (!warehouse1.getName().equals(warehouse.getName())) {
                 count++;
-                if (count == warehouseDao.findAll().size() ) {
+                if (count == warehouseDao.findAll().size()) {
                     warehouseDao.insert(warehouse);
-                    alert("Склад успішно створено");
+                    AlertGenerator.info("Склад успішно створено");
                 }
             }
         }
@@ -98,18 +94,12 @@ public class ControllerCreateStorage {
         Wagon wagon = new Wagon();
 
         for (String nameWagon : wagons) {
-            wagon.setIdWagon(Long.parseLong(nameWagon.substring(wagonName.length())));
+            wagon.setIdWagon(ParseId.getLongId(nameWagon, ControllerTableCar.WAGON_PREFIX_NAME));
             wagon.setType(1);
             warehouseSetDao.addWagon(warehouse.getName(), wagon, pos);
         }
     }
 
-    private void alert(String text){
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Увага!");
-        alert.setContentText(text);
-        alert.showAndWait();
-    }
 
     @FXML
     void initialize() {
@@ -122,11 +112,9 @@ public class ControllerCreateStorage {
         dataSource.setUrl(DataSource.PATH);
         WagonDaoImpl wagonDao = new WagonDaoImpl(dataSource);
         for (Wagon wagon : wagonDao.findAll()) {
-            listViewCar.getItems().addAll(wagonName + wagon.getIdWagon());
+            listViewCar.getItems().addAll(ControllerTableCar.WAGON_PREFIX_NAME + wagon.getIdWagon());
         }
         listViewCar.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-
-
 
     }
 

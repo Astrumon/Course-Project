@@ -22,6 +22,7 @@ public interface WarehouseDao {
     List<Warehouse> findAll();
 
     Warehouse findById(Long id);
+
     Warehouse findByName(String name);
 
     void update(Warehouse warehouse);

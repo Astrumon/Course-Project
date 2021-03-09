@@ -193,10 +193,9 @@ public class TypePlaceDaoImpl implements TypePlaceDao {
      * @param typePlace
      */
     @Override
-    public void update(TypePlace typePlace) {
+    public boolean update(TypePlace typePlace) {
         Connection connection = null;
         WagonDaoImpl wagonDao = new WagonDaoImpl(dataSource);
-
 
         try {
             connection = dataSource.getConnection();
@@ -219,8 +218,10 @@ public class TypePlaceDaoImpl implements TypePlaceDao {
 
             typePlace.setIdTypePlace(findByIdWagon(typePlace.getIdWagon()).getIdTypePlace());
             wagonDao.createPlace(typePlace.getIdTypePlace());
+            return true;
         } catch (SQLException exc) {
             System.out.println(exc);
+            return false;
         } finally {
             try {
                 connection.close();

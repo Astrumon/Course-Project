@@ -11,6 +11,14 @@ public class DataSource {
     public final static String PATH = "jdbc:sqlite:database\\railway.db";
     private String url;
 
+
+    public DataSource() {
+        url = PATH;
+    }
+
+    public DataSource(String url) {
+        this.url = url;
+    }
     public Connection getConnection() throws SQLException {
         SQLiteConfig config = new SQLiteConfig();
         config.enforceForeignKeys(true);

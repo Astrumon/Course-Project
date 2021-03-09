@@ -62,6 +62,6 @@ public interface WagonDao {
 
     void update(Wagon wagon);
 
-    void setTypePlace(Wagon wagon, TypePlace typePlace);
+    boolean setTypePlace(Wagon wagon, TypePlace typePlace);
 
 }
