@@ -5,18 +5,27 @@ public class Train {
     public static final String ID_COLUMN = "id";
     public static final String NAME_COLUMN = "name";
     public static final String COUNT_WAGON_COLUMN = "count_wagon";
+    public static final String CAPACITY_COLUMN = "capacity";
 
     private Long id;
     private String name;
-    private int count_wagon;
+    private int countWagon, capacity;
 
     public Train() {
 
     }
 
-    public Train(String name, int count_wagon) {
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public Train(String name, int countWagon) {
         this.name = name;
-        this.count_wagon = count_wagon;
+        this.countWagon = countWagon;
     }
 
     public Long getId() {
@@ -35,16 +44,16 @@ public class Train {
         this.name = name;
     }
 
-    public int getCount_wagon() {
-        return count_wagon;
+    public int getCountWagon() {
+        return countWagon;
     }
 
-    public void setCount_wagon(int count_wagon) {
-        this.count_wagon = count_wagon;
+    public void setCountWagon(int countWagon) {
+        this.countWagon = countWagon;
     }
 
     @Override
     public String toString() {
-        return "Train[name= "  +  this.name + ", countWagon= " + this.count_wagon + "]";
+        return "Train[name= "  +  this.name + ", countWagon= " + this.countWagon + "]";
     }
 }

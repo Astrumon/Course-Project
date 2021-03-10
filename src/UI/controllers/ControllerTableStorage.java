@@ -10,6 +10,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
+import support.NumberIDGenerator;
 import support.WarehouseManager;
 
 import java.net.URL;
@@ -42,7 +43,10 @@ public class ControllerTableStorage {
 
     @FXML
     void initialize() {
+        fillTable();
+    }
 
+    public void fillTable() {
         warehouseManager = new WarehouseManager();
 
         warehouses = tableWarehouse.getItems();
@@ -61,14 +65,14 @@ public class ControllerTableStorage {
         tblNumber.setCellValueFactory(new Callback<TableColumn.CellDataFeatures, ObservableValue>() {
             @Override
             public ObservableValue call(TableColumn.CellDataFeatures cellDataFeatures) {
-                int idNumber = warehouses.indexOf((Warehouse) cellDataFeatures.getValue()) + 1;
-                return new SimpleIntegerProperty(idNumber);
+                return new SimpleIntegerProperty(NumberIDGenerator.generate(warehouses, cellDataFeatures));
             }
         });
 
         tblCountCars.setCellValueFactory(new PropertyValueFactory<Warehouse, String>("countWagons"));
 
         tableWarehouse.setItems(warehouses);
-
     }
+
+
 }

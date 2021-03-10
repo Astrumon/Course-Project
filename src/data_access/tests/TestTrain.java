@@ -21,10 +21,10 @@ public class TestTrain {
 
         Train train = new Train();
         train.setName("train#2");
-        train.setCount_wagon(2);
+        train.setCountWagon(2);
         Train train1 = new Train();
         train1.setName("train#4");
-        train1.setCount_wagon(5);
+        train1.setCountWagon(5);
 
         TrainDaoImpl trainDao = new TrainDaoImpl(dataSource);
        // trainDao.insert(train1);

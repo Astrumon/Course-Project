@@ -2,10 +2,15 @@ package data_access.dao.impl.train_dao_impl;
 
 import data_access.DataSource;
 import data_access.dao.impl.wagon_dao_impl.WagonDaoImpl;
+import data_access.dao.impl.warehouse_dao_impl.WarehouseDaoImpl;
+import data_access.dao.impl.warehouse_dao_impl.WarehouseSetDaoImpl;
+import data_access.dao.train_dao.TrainDao;
 import data_access.dao.train_dao.TrainSetDao;
 import data_access.model.wagon.Wagon;
 import data_access.model.train.Train;
 import data_access.model.train.TrainSet;
+import data_access.model.warehouse.Warehouse;
+import data_access.model.warehouse.WarehouseSet;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -40,13 +45,54 @@ public class TrainSetDaoImpl implements TrainSetDao {
 
     /**
      * Метод для проверки имени поезда у вагона
-     * @param wagon
+     * @param nameTrain
      * @return
      */
-    private boolean isEmptyTrainName(Wagon wagon) {
-        return wagon.getTrainName() == null;
+    private boolean isEmptyTrainName(String  nameTrain) {
+        return nameTrain == null;
     }
 
+    private void counterWagons(String trainName) {
+
+        TrainSetDaoImpl trainSetDao = new TrainSetDaoImpl(dataSource);
+
+        int count = 0;
+
+        for (TrainSet trainSet : trainSetDao.findAll()) {
+            if (trainSet.getIdWagon() != 0 && trainSet.getName().equals(trainName)) {
+                count++;
+            }
+        }
+
+        Train train = new Train();
+        train.setName(trainName);
+        train.setCountWagon(count);
+
+        TrainDaoImpl trainDao = new TrainDaoImpl(dataSource);
+        trainDao.update(train);
+    }
+
+    private TrainSet getFilledTrainSet(Wagon wagon, int position) {
+
+        TrainSetDaoImpl trainSetDaoSetDao = new TrainSetDaoImpl(dataSource);
+        TrainSet tSet = new TrainSet();
+        for (TrainSet trainSet : trainSetDaoSetDao.findAll()) {
+
+            if (trainSet.getName().equals(wagon.getTrainName()) && samePosition(trainSet, position) && trainSet.getIdWagon() == 0) {
+                tSet = trainSet;
+                tSet.setIdWagon(wagon.getIdWagon());
+                tSet.setPosWagon(position);
+                break;
+            }
+        }
+
+        return tSet;
+    }
+
+   private void  updateWagonTrainSetInfo(TrainSet trainSet) {
+       TrainDaoImpl trainDao = new TrainDaoImpl(dataSource);
+       trainDao.updateTrainSet(trainSet, trainSet.getId());
+   }
     /**
      * Метод который служит для добавления информации о вагоне в таблицу train_set
      * Информация о поезде так же записывается в таблицу wagon
@@ -60,37 +106,30 @@ public class TrainSetDaoImpl implements TrainSetDao {
         Connection connection = null;
         assert wagon != null;
 
-        TrainSetDaoImpl trainSetDao = new TrainSetDaoImpl(dataSource);
-        List<TrainSet> tSetsDao = trainSetDao.findAll();
+        String trainNameOfWagon = wagon.getNameWarehouse();
 
-        Long idWagon = -1l;
-        TrainSet tSet = new TrainSet();
+        wagon.setTrainName(trainName);
+        TrainSet trainSet = getFilledTrainSet(wagon, position);
 
-        for (TrainSet trainSet : tSetsDao) {
 
-            if (trainSet.getName().equals(trainName) && samePosition(trainSet, position) && trainSet.getIdWagon() == 0) {
-                idWagon = wagon.getIdWagon();
-                tSet.setPosWagon(position);
-                tSet = trainSet;
-                tSet.setIdWagon(idWagon);
-                break;
-            }
-        }
 
-        if (isEmptyTrainName(wagon) && tSet.getId() != null) {
+        if (isEmptyTrainName(trainNameOfWagon) && trainSet.getId() != null) {
             try {
                 connection = dataSource.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(SQL_ADD_WAGON);
-                preparedStatement.setLong(1, idWagon);
-                preparedStatement.setString(2, tSet.getName());
-                preparedStatement.setInt(3, tSet.getPosWagon());
+                preparedStatement.setLong(1, trainSet.getIdWagon());
+                preparedStatement.setString(2, trainSet.getName());
+                preparedStatement.setInt(3, trainSet.getPosWagon());
                 preparedStatement.execute();
 
-                WagonDaoImpl wagonDao = new WagonDaoImpl(dataSource);
-                wagonDao.updateTrainSet(tSet, tSet.getId());
+
+                updateWagonTrainSetInfo(trainSet);
+                counterWagons(trainName);
+                return true;
 
             } catch (SQLException exc) {
                 System.out.println(exc);
+                return false;
             } finally {
                 try {
                     connection.close();
@@ -100,8 +139,9 @@ public class TrainSetDaoImpl implements TrainSetDao {
             }
         } else {
             System.out.println("position is taken");
+            return false;
         }
-        return true;
+
     }
 
 

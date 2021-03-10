@@ -59,6 +59,7 @@ public class ControllerCreateStorage {
         for (WarehouseSet warehouseSet : warehouseManager.getWarehouseSets()) {
             if (warehouseSet.getIdWagon() == 0) {
                 pos = warehouseSet.getPosition();
+                break;
             }
         }
         return pos;

@@ -4,6 +4,8 @@ import data_access.DataSource;
 import data_access.dao.train_dao.TrainDao;
 import data_access.model.train.Train;
 import data_access.model.train.TrainSet;
+import data_access.model.warehouse.Warehouse;
+import data_access.model.warehouse.WarehouseSet;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -44,7 +46,8 @@ public class TrainDaoImpl implements TrainDao {
                 Train train = new Train();
                 train.setId(rs.getLong(Train.ID_COLUMN));
                 train.setName(rs.getString(Train.NAME_COLUMN));
-                train.setCount_wagon(rs.getInt(Train.COUNT_WAGON_COLUMN));
+                train.setCapacity(rs.getInt(Train.CAPACITY_COLUMN));
+                train.setCountWagon(rs.getInt(Train.COUNT_WAGON_COLUMN));
                 trains.add(train);
             }
         } catch (SQLException exc) {
@@ -78,7 +81,8 @@ public class TrainDaoImpl implements TrainDao {
                 train = new Train();
                 train.setId(rs.getLong(Train.ID_COLUMN));
                 train.setName(rs.getString(Train.NAME_COLUMN));
-                train.setCount_wagon(rs.getInt(Train.COUNT_WAGON_COLUMN));
+                train.setCapacity(rs.getInt(Train.CAPACITY_COLUMN));
+                train.setCountWagon(rs.getInt(Train.COUNT_WAGON_COLUMN));
             }
         } catch (SQLException exc) {
             System.out.println(exc);
@@ -97,16 +101,18 @@ public class TrainDaoImpl implements TrainDao {
      * @param train
      */
     @Override
-    public void delete(Train train) {
+    public boolean delete(Train train) {
         Connection connection = null;
         try {
             connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE);
             preparedStatement.setLong(1, train.getId());
             preparedStatement.execute();
+            return true;
 
         } catch (SQLException exc) {
             System.out.println(exc);
+            return false;
         } finally {
             try {
                 connection.close();
@@ -121,16 +127,18 @@ public class TrainDaoImpl implements TrainDao {
      * @param train
      */
     @Override
-    public void deleteByName(Train train) {
+    public boolean deleteByName(Train train) {
         Connection connection = null;
         try {
             connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_BY_NAME);
             preparedStatement.setString(1, train.getName());
             preparedStatement.execute();
+            return true;
 
         } catch (SQLException exc) {
             System.out.println(exc);
+            return false;
         } finally {
             try {
                 connection.close();
@@ -147,7 +155,7 @@ public class TrainDaoImpl implements TrainDao {
      */
     private void createTrainSetPosition(Train train) {
         TrainSetDaoImpl trainSetDao = new TrainSetDaoImpl(dataSource);
-        for (int i = 1; i <= train.getCount_wagon(); i++) {
+        for (int i = 1; i <= train.getCapacity(); i++) {
             trainSetDao.insert(new TrainSet(train.getName(), i, train.getId()));
         }
     }
@@ -158,7 +166,7 @@ public class TrainDaoImpl implements TrainDao {
      * @param train
      */
     @Override
-    public void insert(Train train) {
+    public boolean insert(Train train) {
         Connection connection = null;
 
         try {
@@ -166,18 +174,19 @@ public class TrainDaoImpl implements TrainDao {
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
 
             preparedStatement.setString(1, train.getName());
-            preparedStatement.setInt(2, train.getCount_wagon());
+            preparedStatement.setInt(2, train.getCapacity());
             preparedStatement.execute();
             ResultSet rs = preparedStatement.getGeneratedKeys();
-
 
             while (rs.next()) {
                 train.setId(rs.getLong(1));
             }
 
             createTrainSetPosition(train);
+            return true;
         } catch (SQLException exc) {
             System.out.println(exc);
+            return false;
         } finally {
             try {
                 connection.close();
@@ -192,15 +201,68 @@ public class TrainDaoImpl implements TrainDao {
      * @param train
      */
     @Override
-    public void update(Train train) {
+    public boolean update(Train train) {
         Connection connection = null;
         try {
             connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE);
 
             preparedStatement.setString(1, train.getName());
-            preparedStatement.setInt(2, train.getCount_wagon());
-            preparedStatement.setLong(3, train.getId());
+            preparedStatement.setInt(2, train.getCapacity());
+            preparedStatement.setInt(3, train.getCountWagon());
+            preparedStatement.setString(4, train.getName());
+            preparedStatement.execute();
+
+            return true;
+
+        } catch (SQLException exc) {
+            System.out.println(exc);
+            return false;
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException exc) {
+                System.out.println(exc);
+            }
+        }
+    }
+
+    /**
+     * Обновляет записи из таблицы wagon информацией про trainset
+     *
+     * @param trainSet
+     * @param idWarehouseSet
+     */
+    @Override
+    public void updateTrainSet(TrainSet trainSet, Long idWarehouseSet) {
+        Connection connection = null;
+
+        try {
+            connection = dataSource.getConnection();
+            PreparedStatement preparedStatementWagon = connection.prepareStatement(SQL_UPDATE_TRAIN_SET);
+            preparedStatementWagon.setLong(1, idWarehouseSet);
+            preparedStatementWagon.setString(2, trainSet.getName());
+            preparedStatementWagon.setLong(3, trainSet.getIdWagon());
+            preparedStatementWagon.execute();
+        } catch (SQLException exc) {
+            System.out.println(exc);
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException exc) {
+                System.out.println(exc);
+            }
+        }
+    }
+
+    @Override
+    public void updateCountWagon(Train train) {
+        Connection connection = null;
+        try {
+            connection = dataSource.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_COUNT_WAGON);
+            preparedStatement.setInt(1, train.getCountWagon());
+            preparedStatement.setString(2, train.getName());
             preparedStatement.execute();
 
         } catch (SQLException exc) {

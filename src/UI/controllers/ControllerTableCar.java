@@ -12,6 +12,9 @@ import javafx.util.Callback;
 import data_access.DataSource;
 import data_access.dao.impl.wagon_dao_impl.WagonDaoImpl;
 import data_access.model.wagon.Wagon;
+import support.NumberIDGenerator;
+import support.WagonManager;
+import support.WarehouseManager;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -41,17 +44,21 @@ public class ControllerTableCar {
 
     public static final String WAGON_PREFIX_NAME = "Вагон№ ";
 
+    private WagonManager wagonManager;
+
 
     private ObservableList<Wagon> wagons;
 
     @FXML
     void initialize() {
-        DataSource dataSource = new DataSource();
-        dataSource.setUrl(DataSource.PATH);
-        WagonDaoImpl wagonDao = new WagonDaoImpl(dataSource);
+        fillTable();
+    }
+
+    public void fillTable() {
+        wagonManager = new WagonManager();
 
         wagons = tableCar.getItems();
-        wagons.addAll(wagonDao.findAll());
+        wagons.addAll(wagonManager.getWagons());
 
         tblName.setCellValueFactory(new Callback<TableColumn.CellDataFeatures, ObservableValue>() {
             @Override
@@ -67,12 +74,14 @@ public class ControllerTableCar {
         tblNumber.setCellValueFactory(new Callback<TableColumn.CellDataFeatures, ObservableValue>() {
             @Override
             public ObservableValue call(TableColumn.CellDataFeatures cellDataFeatures) {
-                return new SimpleIntegerProperty(wagons.indexOf((Wagon) cellDataFeatures.getValue()) + 1);
+                return new SimpleIntegerProperty(NumberIDGenerator.generate(wagons, cellDataFeatures));
             }
         });
 
         tableCar.setItems(wagons);
+    }
 
+    public void clickToEdit() {
         tableCar.setRowFactory(tv -> {
             TableRow<Wagon> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
@@ -89,8 +98,6 @@ public class ControllerTableCar {
             });
             return row;
         });
-
-
     }
 }
 
