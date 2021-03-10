@@ -1,10 +1,10 @@
 package support;
 
-import main.DataSource;
-import main.dao.impl.wagon_dao_impl.TypePlaceDaoImpl;
-import main.dao.impl.wagon_dao_impl.WagonDaoImpl;
-import main.model.wagon.TypePlace;
-import main.model.wagon.Wagon;
+import data_access.DataSource;
+import data_access.dao.impl.wagon_dao_impl.TypePlaceDaoImpl;
+import data_access.dao.impl.wagon_dao_impl.WagonDaoImpl;
+import data_access.model.wagon.TypePlace;
+import data_access.model.wagon.Wagon;
 
 import java.util.List;
 
