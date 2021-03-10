@@ -15,4 +15,11 @@ public class AlertGenerator {
         alert.setContentText(text);
         alert.showAndWait();
     }
+
+    public static void error(String text) {
+        alert.setAlertType(Alert.AlertType.ERROR);
+        alert.setTitle("Увага!");
+        alert.setContentText(text);
+        alert.showAndWait();
+    }
 }

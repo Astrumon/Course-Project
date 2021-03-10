@@ -1,6 +1,6 @@
 package support;
 
-import data_access.DataSource;
+
 import data_access.dao.impl.wagon_dao_impl.TypePlaceDaoImpl;
 import data_access.dao.impl.wagon_dao_impl.WagonDaoImpl;
 import data_access.model.wagon.TypePlace;
@@ -8,9 +8,7 @@ import data_access.model.wagon.Wagon;
 
 import java.util.List;
 
-public class WagonManager {
-
-    DataSource dataSource = new DataSource();
+public class WagonManager extends Manager{
 
     private WagonDaoImpl wagonDao;
 
@@ -30,10 +28,10 @@ public class WagonManager {
     public boolean deleteWagon(Long idWagon) {
         wagon.setIdWagon(idWagon);
         wagonDao.delete(wagon);
-        return deleteWagonFromWarehouse(idWagon);
+        return deleteWagonPlace(idWagon);
     }
 
-    private boolean deleteWagonFromWarehouse(Long idWagon) {
+    private boolean deleteWagonPlace(Long idWagon) {
         return typePlaceDao.deleteByIdWagon(idWagon);
     }
 
@@ -50,7 +48,6 @@ public class WagonManager {
     }
 
     public List<Wagon> getWagons() {
-        wagons = wagonDao.findAll();
-        return wagons;
+        return wagonDao.findAll();
     }
 }

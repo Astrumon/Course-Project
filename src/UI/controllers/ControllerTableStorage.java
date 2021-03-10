@@ -1,5 +1,6 @@
 package UI.controllers;
 
+import data_access.model.warehouse.Warehouse;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -9,9 +10,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
-import data_access.DataSource;
-import data_access.dao.impl.warehouse_dao_impl.WarehouseDaoImpl;
-import data_access.model.warehouse.Warehouse;
+import support.WarehouseManager;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -38,24 +37,22 @@ public class ControllerTableStorage {
 
     private ObservableList<Warehouse> warehouses;
 
+    private WarehouseManager warehouseManager;
 
 
     @FXML
     void initialize() {
-        DataSource dataSource = new DataSource();
-        dataSource.setUrl(DataSource.PATH);
-        WarehouseDaoImpl warehouseDao = new WarehouseDaoImpl(dataSource);
 
+        warehouseManager = new WarehouseManager();
 
         warehouses = tableWarehouse.getItems();
-        warehouses.addAll(warehouseDao.findAll());
+        warehouses.addAll(warehouseManager.getWarehouses());
         //tblName.setCellValueFactory(new PropertyValueFactory<Warehouse, String>("name"));
-
 
         tblName.setCellValueFactory(new Callback<TableColumn.CellDataFeatures, ObservableValue>() {
             @Override
             public ObservableValue call(TableColumn.CellDataFeatures cellDataFeatures) {
-                String name = ((Warehouse)cellDataFeatures.getValue()).getName();
+                String name = ((Warehouse) cellDataFeatures.getValue()).getName();
 
                 return new SimpleStringProperty(name);
             }
@@ -69,11 +66,9 @@ public class ControllerTableStorage {
             }
         });
 
-
         tblCountCars.setCellValueFactory(new PropertyValueFactory<Warehouse, String>("countWagons"));
 
         tableWarehouse.setItems(warehouses);
-
 
     }
 }

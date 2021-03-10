@@ -198,7 +198,7 @@ public class WarehouseDaoImpl implements WarehouseDao {
      * @param warehouse
      */
     @Override
-    public void insert(Warehouse warehouse) {
+    public boolean insert(Warehouse warehouse) {
         Connection connection = null;
         try {
             connection = dataSource.getConnection();
@@ -210,8 +210,10 @@ public class WarehouseDaoImpl implements WarehouseDao {
                 warehouse.setId(rs.getLong(1));
             }
             createWarehousePositions(warehouse);
+            return true;
         } catch (SQLException exc) {
             System.out.println(exc);
+            return false;
         } finally {
             try {
                 connection.close();
@@ -226,16 +228,17 @@ public class WarehouseDaoImpl implements WarehouseDao {
      * @param warehouse
      */
     @Override
-    public void deleteByName(Warehouse warehouse) {
+    public boolean deleteByName(Warehouse warehouse) {
         Connection connection = null;
         try {
             connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_BY_NAME);
             preparedStatement.setString(1, warehouse.getName());
             preparedStatement.execute();
-
+            return true;
         } catch (SQLException exc) {
             System.out.println(exc);
+            return false;
         } finally {
             try {
                 connection.close();

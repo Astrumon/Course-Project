@@ -31,8 +31,8 @@ public interface WarehouseDao {
 
     void delete(Warehouse warehouse);
 
-    void deleteByName(Warehouse warehouse);
+    boolean deleteByName(Warehouse warehouse);
 
-    void insert(Warehouse warehouse);
+    boolean insert(Warehouse warehouse);
 
 }

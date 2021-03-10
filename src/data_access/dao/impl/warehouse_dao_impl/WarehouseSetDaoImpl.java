@@ -21,6 +21,7 @@ public class WarehouseSetDaoImpl implements WarehouseSetDao {
 
     /**
      * Конструктор для подключения к базе данных
+     *
      * @param dataSource
      */
     public WarehouseSetDaoImpl(DataSource dataSource) {
@@ -29,6 +30,7 @@ public class WarehouseSetDaoImpl implements WarehouseSetDao {
 
     /**
      * Выборка всей информации из таблицы warehouse_set
+     *
      * @return
      */
     @Override
@@ -62,6 +64,7 @@ public class WarehouseSetDaoImpl implements WarehouseSetDao {
 
     /**
      * Выборка всей информации одной записи по заданому id из таблицы warehouse_set
+     *
      * @param id
      * @return
      */
@@ -75,7 +78,7 @@ public class WarehouseSetDaoImpl implements WarehouseSetDao {
             preparedStatement.setLong(1, id);
 
             ResultSet resultSet = preparedStatement.executeQuery();
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 warehouseSet.setNameWarehouse(resultSet.getString(WarehouseSet.NAME_COLUMN));
                 warehouseSet.setIdWagon(resultSet.getLong(WarehouseSet.ID_WAGON_COLUMN));
                 warehouseSet.setIdWarehouse(resultSet.getLong(WarehouseSet.ID_WAREHOUES_COLUMN));
@@ -95,6 +98,7 @@ public class WarehouseSetDaoImpl implements WarehouseSetDao {
 
     /**
      * Выборка всей информации одной записи по заданому названию склада из таблицы warehouse_set
+     *
      * @param name
      * @return
      */
@@ -108,7 +112,7 @@ public class WarehouseSetDaoImpl implements WarehouseSetDao {
             preparedStatement.setString(1, name);
 
             ResultSet resultSet = preparedStatement.executeQuery();
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 warehouseSet = new WarehouseSet();
                 warehouseSet.setId(resultSet.getLong(WarehouseSet.ID_COLUMN));
                 warehouseSet.setIdWagon(resultSet.getLong(WarehouseSet.ID_WAGON_COLUMN));
@@ -130,6 +134,7 @@ public class WarehouseSetDaoImpl implements WarehouseSetDao {
 
     /**
      * Удаление записи с таблицы warehouseSet по warehouseSet.id
+     *
      * @param warehouseSet
      */
     @Override
@@ -153,6 +158,7 @@ public class WarehouseSetDaoImpl implements WarehouseSetDao {
 
     /**
      * Удаление записи с таблицы warehouse_set по warehouse.name
+     *
      * @param warehouse
      */
     @Override
@@ -177,6 +183,7 @@ public class WarehouseSetDaoImpl implements WarehouseSetDao {
 
     /**
      * Обновляет запись в таблице warehouse_set информацией об объекте warehouseSet
+     *
      * @param warehouseSet
      */
     @Override
@@ -204,15 +211,17 @@ public class WarehouseSetDaoImpl implements WarehouseSetDao {
 
     /**
      * Метод для проверки названия склада в котором находится вагон
-     * @param wagon
+     *
+     * @param nameWarehouse
      * @return
      */
-    private boolean isEmptyWarehouseName(Wagon wagon) {
-        return wagon.getNameWarehouse() == null;
+    private boolean isEmptyWarehouseName(String nameWarehouse) {
+        return nameWarehouse == null;
     }
 
     /**
      * Метод для проверки позиции вагона на складе
+     *
      * @param warehouseSet
      * @param position
      * @return
@@ -222,67 +231,82 @@ public class WarehouseSetDaoImpl implements WarehouseSetDao {
     }
 
 
+    private void counterWagons(String warehouseName) {
+
+        WarehouseSetDaoImpl warehouseSetDao = new WarehouseSetDaoImpl(dataSource);
+
+        int count = 0;
+
+        for (WarehouseSet warehouseSet : warehouseSetDao.findAll()) {
+            if (warehouseSet.getIdWagon() != 0 && warehouseSet.getNameWarehouse().equals(warehouseName)) {
+                count++;
+            }
+        }
+
+        Warehouse warehouse = new Warehouse();
+        warehouse.setName(warehouseName);
+        warehouse.setCountWagons(count);
+
+        WarehouseDaoImpl warehouseDao = new WarehouseDaoImpl(dataSource);
+        warehouseDao.updateCountWagon(warehouse);
+    }
+
+    private WarehouseSet getFilledWarehouseSet(Wagon wagon, int position) {
+
+        WarehouseSetDaoImpl warehouseSetDao = new WarehouseSetDaoImpl(dataSource);
+        WarehouseSet wSet = new WarehouseSet();
+        for (WarehouseSet warehouseSet : warehouseSetDao.findAll()) {
+
+            if (warehouseSet.getNameWarehouse().equals(wagon.getNameWarehouse()) && samePosition(warehouseSet, position) && warehouseSet.getIdWagon() == 0) {
+                wSet = warehouseSet;
+                wSet.setIdWagon(wagon.getIdWagon());
+                wSet.setPosition(position);
+                break;
+            }
+        }
+
+        return wSet;
+    }
+
+    private void updateWagonWarehouseSetInfo(WarehouseSet warehouseSet) {
+        WagonDaoImpl wagonDao = new WagonDaoImpl(dataSource);
+        wagonDao.updateWarehouseSet(warehouseSet, warehouseSet.getId());
+    }
     /**
      * Метод который служит для добавления информации о вагоне в таблицу warehouse_set
      * Информация о складе так же записывается в таблицу wagon
+     *
      * @param warehouseName
      * @param wagon
      * @param position
      * @return
      */
     @Override
-    public void addWagon( String warehouseName, Wagon wagon, int position) {
+    public boolean addWagon(String warehouseName, Wagon wagon, int position) {
 
         Connection connection = null;
 
-        WarehouseSetDaoImpl warehouseSetDao = new WarehouseSetDaoImpl(dataSource);
-        int count = 1;
+        String warehouseNameOfWagon = wagon.getNameWarehouse();
 
-        for (WarehouseSet warehouseSet : warehouseSetDao.findAll()) {
-            if (warehouseSet.getIdWagon() != 0 && warehouseSet.getNameWarehouse().equals(warehouseName)) {
+        wagon.setNameWarehouse(warehouseName);
+        WarehouseSet warehouseSet = getFilledWarehouseSet(wagon, position);
 
-                count++;
-            }
-        }
-        System.out.println(count);
-        Warehouse warehouse = new Warehouse();
-        warehouse.setName(warehouseName);
-        warehouse.setCountWagons(count);
-
-        WarehouseDaoImpl warehouseDao = new WarehouseDaoImpl(dataSource);
-         warehouseDao.updateCountWagon(warehouse);
-        List<WarehouseSet> wSetsDao = warehouseSetDao.findAll();
-
-        Long idWagon = -1l;
-        int numberOfPosition = 0;
-
-        WarehouseSet wSet = new WarehouseSet();
-
-        for (WarehouseSet warehouseSet : wSetsDao) {
-
-            if (warehouseSet.getNameWarehouse().equals(warehouseName) && samePosition(warehouseSet, position) && warehouseSet.getIdWagon() == 0 ) {
-                idWagon = wagon.getIdWagon();
-                numberOfPosition = position;
-                wSet = warehouseSet;
-                wSet.setIdWagon(idWagon);
-                break;
-            }
-        }
-
-        if (isEmptyWarehouseName(wagon) && wSet.getId() != null) {
+        if (isEmptyWarehouseName(warehouseNameOfWagon) && warehouseSet.getIdWarehouse() != null) {
             try {
                 connection = dataSource.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(SQL_ADD_WAGON);
-                preparedStatement.setLong(1, idWagon);
-                preparedStatement.setString(2, wSet.getNameWarehouse());
-                preparedStatement.setLong(3, numberOfPosition);
+                preparedStatement.setLong(1, warehouseSet.getIdWagon());
+                preparedStatement.setString(2, warehouseSet.getNameWarehouse());
+                preparedStatement.setLong(3, warehouseSet.getPosition());
                 preparedStatement.execute();
 
-                WagonDaoImpl wagonDao = new WagonDaoImpl(dataSource);
-                wagonDao.updateWarehouseSet(wSet, wSet.getId());
+                updateWagonWarehouseSetInfo(warehouseSet);
+                counterWagons(warehouseName);
+                return true;
 
             } catch (SQLException exc) {
                 System.out.println(exc);
+                return false;
             } finally {
                 try {
                     connection.close();
@@ -292,11 +316,13 @@ public class WarehouseSetDaoImpl implements WarehouseSetDao {
             }
         } else {
             System.out.println("position is taken");
+            return false;
         }
     }
 
     /**
      * Вставка записи информации про поезд в таблицу warehouse_set.
+     *
      * @param warehouseSet
      */
     @Override

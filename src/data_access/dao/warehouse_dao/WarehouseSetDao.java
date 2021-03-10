@@ -41,7 +41,7 @@ public interface WarehouseSetDao {
 
     void update(WarehouseSet warehouseSet);
 
-    void addWagon(String warehouseName, Wagon wagon, int position);
+    boolean addWagon(String warehouseName, Wagon wagon, int position);
 
     void insert(WarehouseSet warehouseSet);
 
